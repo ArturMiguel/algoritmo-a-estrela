@@ -29,9 +29,18 @@ function Bloco(i, j){
     this.h = 0;
     this.vizinhos = [];
     this.anterior = "";
+    this.obstaculo = false;
+    
+    //Definindo o bloco aleatoriamente como obstaculo
+    if(Math.random(1) < 0.1){
+        this.obstaculo = true;
+    }
     
     this.show = function(colunas){
         fill(colunas);
+        if(this.obstaculo){
+            fill(104, 76, 56);
+        }
         noStroke();
         rect(this.i * w, this.j * h, w - 1, h - 1); //Retângulo
     }
@@ -78,11 +87,13 @@ function setup(){
     }
     
     //DEFININDO A LOCALIZAÇÃO DOS OBJETOS
+    /*Personagem*/
     inicio = grid[28][26];
-    espada = grid[tam -1 ][tam - 1];
+    /*Espada*/
+    grid[tam - 1][tam - 1].obstaculo = false;
+    espada = grid[tam - 1][tam - 1];
     
     blocosExpandidos.push(inicio);
-    //console.log(grid);
 }
 
 function draw(){
@@ -94,7 +105,6 @@ function draw(){
         }
     }
     espada.show(color(0, 0, 255));
-    
     
     //PERCURSO
     if(blocosExpandidos.length > 0){
@@ -119,7 +129,7 @@ function draw(){
         for(var i = 0; i < vizinhos.length; i++){
             var vizinho = vizinhos[i];
             
-            if(!blocosVisitados.includes(vizinho)){
+            if(!blocosVisitados.includes(vizinho) && !vizinho.obstaculo){
                 var auxG = atual.g + 1;
                 
                 if(blocosExpandidos.includes(vizinho)){
@@ -141,11 +151,14 @@ function draw(){
     else{
         
     }
+    //Coloração dos blocos visitados
     for(var i = 0; i < blocosVisitados.length; i++){
-        blocosVisitados[i].show(color(211, 211, 211));
+        //blocosVisitados[i].show(color(255, 255, 211));
+        blocosVisitados[i].show(color(255, 255, 255));
     }
+    //Coloração dos blocos expandidos
     for(var i = 0; i < blocosExpandidos.length; i++){
-        blocosExpandidos[i].show(color(255, 0, 0));
+        blocosExpandidos[i].show(color(255, 255, 255));
     }
     
     melhorCaminho = [];
@@ -155,7 +168,7 @@ function draw(){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    
+    //Coloração do melhor caminho
     for(var i = 0; i < melhorCaminho.length; i++){
         melhorCaminho[i].show(color(0, 255, 0))
     }
