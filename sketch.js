@@ -7,12 +7,12 @@ function removeBloco(arr, bloco){
 }
 
 function heuristic(a, b){
-    var distancia = dist(a.i, a.j, b.i, b.j)
-    //var distancia = abs(a.i - b.i) + abs(a.j - b.j);
+    //var distancia = dist(a.i, a.j, b.i, b.j)
+    var distancia = abs(a.i - b.i) + abs(a.j - b.j);
     return distancia;
 }
 
-var tam = 48;
+var tam = 20;
 var colunas = tam, linhas = tam;
 var grid = new Array(colunas);
 
@@ -60,7 +60,7 @@ function Bloco(i, j){
         if(j > 0){
             this.vizinhos.push(grid[i][j - 1]);
         }
-        if(i > 0 && j > 0){
+        /*if(i > 0 && j > 0){
             this.vizinhos.push(grid[i - 1][j - 1]);
         }
         if(i < colunas - 1 && j > 0){
@@ -69,7 +69,7 @@ function Bloco(i, j){
         if(i > 0 && j < linhas - 1){
             this.vizinhos.push(grid[i - 1][j + 1]);
         }
-        /*if(i < colunas - 1 && j < linhas - 1){
+        if(i < colunas - 1 && j < linhas - 1){
             this.vizinhos.push(grid[i + 1][j + 1]);
         }*/
     }
@@ -129,9 +129,12 @@ function draw(){
         var atual = blocosExpandidos[menorIndex];
         if(atual === espada){
             noLoop();
-            var confirma = confirm("Espada encontrada");
-            if(confirma){
-                location.reload();
+            melhorCaminho = [];
+            var aux = atual;
+            melhorCaminho.push(aux);
+            while(aux.anterior){ //recursivo
+                melhorCaminho.push(aux.anterior);
+                aux = aux.anterior;
             }
         }
         
@@ -144,20 +147,23 @@ function draw(){
             
             if(!blocosVisitados.includes(vizinho) && !vizinho.obstaculo){
                 var auxG = atual.g + 1;
-                
+                var novoCaminho = false;
                 if(blocosExpandidos.includes(vizinho)){
                     if(auxG < vizinho.g){
                         vizinho.g = auxG;
+                        novoCaminho = true;
                     }
                 }
                 else{
                     vizinho.g = auxG;
+                    novoCaminho = true;
                     blocosExpandidos.push(vizinho);
                 }
-                
-                vizinho.h = heuristic(vizinho, espada);
-                vizinho.f = vizinho.g + vizinho.h;
-                vizinho.anterior = atual;
+                if(novoCaminho){
+                    vizinho.h = heuristic(vizinho, espada);
+                    vizinho.f = vizinho.g + vizinho.h;
+                    vizinho.anterior = atual;
+                }
             }
         }
     }
@@ -173,16 +179,8 @@ function draw(){
     for(var i = 0; i < blocosExpandidos.length; i++){
         blocosExpandidos[i].show(color(255, 255, 255));
     }
-    
-    melhorCaminho = [];
-    var aux = atual;
-    melhorCaminho.push(aux);
-    while(aux.anterior){ //recursivo
-        melhorCaminho.push(aux.anterior);
-        aux = aux.anterior;
-    }
     //Coloração do melhor caminho
     for(var i = 0; i < melhorCaminho.length; i++){
-        melhorCaminho[i].show(color(0, 255, 0))
+        melhorCaminho[i].show(color(0, 0, 0))
     }
 }
