@@ -117,9 +117,10 @@ function draw(){
         var atual = blocosExpandidos[menorIndex];
         if(atual === espada){
             noLoop();
-            alert("Encontrou a espada em\n" + 
-                 "Linha " + atual.i +
-                 "\nColuna " + atual.j);
+            var confirma = confirm("Espada encontrada");
+            if(confirma){
+                location.reload();
+            }
         }
         
         removeBloco(blocosExpandidos, atual);
@@ -164,7 +165,7 @@ function draw(){
     melhorCaminho = [];
     var aux = atual;
     melhorCaminho.push(aux);
-    while(aux.anterior){
+    while(aux.anterior){ //recursivo
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
