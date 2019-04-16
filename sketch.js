@@ -7,8 +7,8 @@ function removeBloco(arr, bloco){
 }
 
 function heuristic(a, b){
-   // var distancia = dist(a.i, a.j, b.i, b.j)
-    var distancia = abs(a.i - b.i) + abs(a.j - b.j);
+    var distancia = dist(a.i, a.j, b.i, b.j)
+    //var distancia = abs(a.i - b.i) + abs(a.j - b.j);
     return distancia;
 }
 
@@ -32,7 +32,7 @@ function Bloco(i, j){
     this.obstaculo = false;
     
     //Definindo o bloco aleatoriamente como obstaculo
-    if(Math.random(1) < 0.1){
+    if(Math.random(1) < 0.3){
         this.obstaculo = true;
     }
     
@@ -60,6 +60,18 @@ function Bloco(i, j){
         if(j > 0){
             this.vizinhos.push(grid[i][j - 1]);
         }
+        if(i > 0 && j > 0){
+            this.vizinhos.push(grid[i - 1][j - 1]);
+        }
+        if(i < colunas - 1 && j > 0){
+            this.vizinhos.push(grid[i + 1][j - 1]);
+        }
+        if(i > 0 && j < linhas - 1){
+            this.vizinhos.push(grid[i - 1][j + 1]);
+        }
+        /*if(i < colunas - 1 && j < linhas - 1){
+            this.vizinhos.push(grid[i + 1][j + 1]);
+        }*/
     }
 }
 
@@ -88,7 +100,7 @@ function setup(){
     
     //DEFININDO A LOCALIZAÇÃO DOS OBJETOS
     /*Personagem*/
-    inicio = grid[28][26];
+    inicio = grid[0][0];
     /*Espada*/
     grid[tam - 1][tam - 1].obstaculo = false;
     espada = grid[tam - 1][tam - 1];
