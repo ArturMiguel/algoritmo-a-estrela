@@ -12,7 +12,7 @@ function heuristic(a, b){
     return distancia;
 }
 
-var tam = 20;
+var tam = 48;
 var colunas = tam, linhas = tam;
 var grid = new Array(colunas);
 
@@ -179,6 +179,15 @@ function draw(){
     for(var i = 0; i < blocosExpandidos.length; i++){
         blocosExpandidos[i].show(color(255, 255, 255));
     }
+    
+    melhorCaminho = [];
+    var aux = atual;
+    melhorCaminho.push(aux);
+    while(aux.anterior){ //recursivo
+        melhorCaminho.push(aux.anterior);
+        aux = aux.anterior;
+    }
+
     //Coloração do melhor caminho
     for(var i = 0; i < melhorCaminho.length; i++){
         melhorCaminho[i].show(color(0, 0, 0))
