@@ -88,10 +88,10 @@ function setup(){
     dungeon1.custo = 0;
     dungeon2 = grid[45][20];
     dungeon2.custo = 0;
-    dungeon3 = grid[28][34];
+    dungeon3 = grid[6][37];
     dungeon3.custo = 0;
     /*Objetivo*/
-    objetivo = dungeon1;
+    objetivo = espada;
 
     blocosExpandidos.push(personagem);
 }
