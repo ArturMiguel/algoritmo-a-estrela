@@ -30,6 +30,7 @@ function Bloco(i, j){
     this.vizinhos = [];
     this.anterior = "";
     this.obstaculo = false;
+    this.terreno = '';
     
     //Definindo o bloco aleatoriamente como obstaculo
     if(Math.random(1) < 0.3){
@@ -116,7 +117,11 @@ function draw(){
     background(0);
     for(var i = 0; i < tam; i++){
         for(var j = 0; j < tam; j++){
-            grid[i][j].show(color(lista_rgb[j][i][0], lista_rgb[j][i][1], lista_rgb[j][i][0]));
+            if(lista_rgb[j][i][0] < 70){
+                grid[i][j].show(color(0, 176, 80))
+            }else{
+                grid[i][j].show(color(lista_rgb[j][i][0], lista_rgb[j][i][1], lista_rgb[j][i][2]));
+            }
         }
     }
     //espada.show(color(0, 0, 255));
