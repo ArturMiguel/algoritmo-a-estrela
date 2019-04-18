@@ -113,20 +113,31 @@ function setup(){
 }
 
 function draw(){
-    //ATRIBUIÇÃO DAS CORES
+    /**********************************************************
+    ATRIBUIÇÃO DE CORES
+    *********************************************************/
     background(0);
+    //Padrões médio das cores
+    //grama -> (146, 208, 80)
+    //areia -> (196, 188, 150)
+    //floresta -> (0, 176, 80)
+    //montanha -> (148, 138, 84)
+    //água -> (84, 141, 212)
+    
     for(var i = 0; i < tam; i++){
         for(var j = 0; j < tam; j++){
             if(lista_rgb[j][i][0] < 70){
-                grid[i][j].show(color(0, 176, 80))
-            }else{
+               grid[i][j].show(color(0, 176, 80))
+           }else{
                 grid[i][j].show(color(lista_rgb[j][i][0], lista_rgb[j][i][1], lista_rgb[j][i][2]));
-            }
+           }
         }
     }
     //espada.show(color(0, 0, 255));
     
-    //PERCURSO
+    /**********************************************************
+    PERCURSO
+    *********************************************************/
     if(blocosExpandidos.length > 0){
         var menorIndex = 0;
         for(var i = 0; i < blocosExpandidos.length; i++){
