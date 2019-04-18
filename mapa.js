@@ -6,12 +6,12 @@ function removeBloco(arr, bloco){
     }
 }
 
-function heuristic(inicio, fim){
-    var d1 = Math.abs(fim.i - inicio.i);
-    var d2 = Math.abs(fim.j - inicio.j);
+/*function heuristic(inicio, fim){
+    var d1 = abs(fim.i - inicio.i);
+    var d2 = abs(fim.j - inicio.j);
     var distancia = d1 + d2;
     return distancia;
-}
+}*/
 
 var tam = 48;
 var colunas = tam, linhas = tam;
@@ -172,7 +172,7 @@ function draw(){
             
             if(!blocosVisitados.includes(vizinho)){
                 //var auxG = atual.g + 1;
-                var auxG = (atual.g + 1) + atual.custo;
+                var auxG = (atual.g + 1) + atual.custo; //Adiciona o custo de terreno a cada passo
                 var novoCaminho = false;
                 if(blocosExpandidos.includes(vizinho)){
                     if(auxG < vizinho.g){
@@ -187,7 +187,7 @@ function draw(){
                 }
                 if(novoCaminho){
                     //vizinho.h = heuristic(vizinho, objetivo);
-                    vizinho.h = abs(objetivo.i - vizinho.i) + abs(objetivo.j - vizinho.j);
+                    vizinho.h = abs(objetivo.i - vizinho.i) + abs(objetivo.j - vizinho.j); //Manhattan distance
                     vizinho.f = vizinho.g + vizinho.h;
                     vizinho.anterior = atual;
                 }
