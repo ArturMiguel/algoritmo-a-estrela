@@ -135,7 +135,7 @@ function draw(){
             }else if(minima == parseInt(d_areia)){
                 grid[i][j].show(color(196,188,150));
             }else if(minima == parseInt(d_floresta)){
-                grid[i][j].show(color(0,176,80));
+                grid[i][j].show(color(0, 176, 80));
             }else if(minima == parseInt(d_montanha)){
                 grid[i][j].show(color(148, 138, 84));
             }else if(minima == parseInt(d_agua)){
