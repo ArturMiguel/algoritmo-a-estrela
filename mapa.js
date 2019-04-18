@@ -17,7 +17,7 @@ var colunas = tam, linhas = tam;
 var grid = new Array(colunas);
 
 var blocosExpandidos = [], blocosVisitados = [];
-var inicio, espada;
+var personagem, espada;
 var w, h;
 var melhorCaminho = [];
 
@@ -29,21 +29,17 @@ function Bloco(i, j){
     this.h = 0;
     this.vizinhos = [];
     this.anterior = "";
-    this.obstaculo = false;
-    this.terreno = '';
+    this.terreno = "";
+    this.peso = 0;
     
     //Definindo o bloco aleatoriamente como obstaculo
-    if(Math.random(1) < 0.3){
+    /*if(Math.random(1) < 0.1){
         this.obstaculo = true;
-    }
+    }*/
     
-
     this.show = function(colunas){
         fill(colunas);
-        if(this.obstaculo){
-            //fill(104, 76, 56);
-        }
-        noStroke();
+        // noStroke();
         rect(this.i * w, this.j * h, w - 1, h - 1); //Retângulo
     }
     
@@ -102,14 +98,16 @@ function setup(){
         }
     }
     
-    //DEFININDO A LOCALIZAÇÃO DOS OBJETOS
+    /*------------------------------------------------------
+        DEFININDO A LOCALIZAÇÃO DOS OBJETOS
+    -------------------------------------------------------*/
     /*Personagem*/
-    inicio = grid[0][0];
+    personagem = grid[28][31]; //Coluna 28 - Linha 31 (diferença de 6 linhas com a imagem)
     /*Espada*/
-    grid[tam - 1][tam - 1].obstaculo = false;
+    //grid[tam - 1][tam - 1].obstaculo = false;
     espada = grid[tam - 1][tam - 1];
     
-    blocosExpandidos.push(inicio);
+    blocosExpandidos.push(personagem);
 }
 
 function draw(){
@@ -133,7 +131,7 @@ function draw(){
             if(minima == parseInt(d_grama)){
                 grid[i][j].show(color(146, 208, 80));
             }else if(minima == parseInt(d_areia)){
-                grid[i][j].show(color(196,188,150));
+                grid[i][j].show(color(196, 188, 150));
             }else if(minima == parseInt(d_floresta)){
                 grid[i][j].show(color(0, 176, 80));
             }else if(minima == parseInt(d_montanha)){
@@ -143,7 +141,9 @@ function draw(){
             }
         }
     }
-    //espada.show(color(0, 0, 255));
+
+    personagem.show(color(255, 0, 0));
+    espada.show(color(154, 154, 154));
     
     //PERCURSO
     if(blocosExpandidos.length > 0){
@@ -216,7 +216,7 @@ function draw(){
     }
 
     //Coloração do melhor caminho
-    for(var i = 0; i < melhorCaminho.length; i++){
-        //melhorCaminho[i].show(color(0, 0, 0))
+    for(var i = 1; i < melhorCaminho.length - 1; i++){
+        melhorCaminho[i].show(color(0, 0, 0))
     }
 }
