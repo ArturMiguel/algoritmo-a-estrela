@@ -6,9 +6,10 @@ function removeBloco(arr, bloco){
     }
 }
 
-function heuristic(a, b){
-    //var distancia = dist(a.i, a.j, b.i, b.j)
-    var distancia = abs(a.i - b.i) + abs(a.j - b.j);
+function heuristic(inicio, fim){
+    var d1 = Math.abs(fim.i - inicio.i);
+    var d2 = Math.abs(fim.j - inicio.j);
+    var distancia = d1 + d2;
     return distancia;
 }
 
@@ -17,34 +18,25 @@ var colunas = tam, linhas = tam;
 var grid = new Array(colunas);
 
 var blocosExpandidos = [], blocosVisitados = [];
-var personagem, espada;
+var personagem, espada, dungeon1, dungeon2, dungeon3, objetivo;
 var w, h;
 var melhorCaminho = [];
 
 function Bloco(i, j){
     this.i = i;
     this.j = j;
-    this.f = 0;
-    this.g = 0;
-    this.h = 0;
+    this.f = 0; //Distância total do inicio até o objetivo f(n) = g(n) + h(n)
+    this.g = 0;  //Distância do nó inicial até o atual
+    this.h = 0; //Heuristica utilizada para calcular a distância do nó atual até o nó objetivo
     this.vizinhos = [];
     this.anterior = "";
     this.terreno = "";
-    this.peso = 0;
-    
-    //Definindo o bloco aleatoriamente como obstaculo
-    /*if(Math.random(1) < 0.1){
-        this.obstaculo = true;
-    }*/
-    
+    this.custo = 0;
     this.show = function(colunas){
         fill(colunas);
-        // noStroke();
-        rect(this.i * w, this.j * h, w - 1, h - 1); //Retângulo
-    }
-    
-
-    //VIZINHOS DO NÓ ATUAL
+        rect(this.i * w, this.j * h, w - 1, h - 1);
+    }  
+    //Vizinhos do nó atual podem estar à esquerda, à direita, acima ou abaixo.
     this.addVizinhos = function(grid){
         var i = this.i;
         var j = this.j;
@@ -60,25 +52,11 @@ function Bloco(i, j){
         if(j > 0){
             this.vizinhos.push(grid[i][j - 1]);
         }
-        /*if(i > 0 && j > 0){
-            this.vizinhos.push(grid[i - 1][j - 1]);
-        }
-        if(i < colunas - 1 && j > 0){
-            this.vizinhos.push(grid[i + 1][j - 1]);
-        }
-        if(i > 0 && j < linhas - 1){
-            this.vizinhos.push(grid[i - 1][j + 1]);
-        }
-        if(i < colunas - 1 && j < linhas - 1){
-            this.vizinhos.push(grid[i + 1][j + 1]);
-        }*/
     }
 }
 
 function setup(){
     createCanvas(1366, 1366);
-    
-    //PROPORÇÃO CORRETA DOS PIXELS
     w = width / colunas;
     h = height / linhas;
     
@@ -86,7 +64,6 @@ function setup(){
     for(var i = 0; i < colunas; i++){
         grid[i] = new Array(linhas);
     }
-    
     for(var i = 0; i < colunas; i++){
         for(var j = 0; j < linhas; j++){
             grid[i][j] = new Bloco(i, j);
@@ -102,16 +79,27 @@ function setup(){
         DEFININDO A LOCALIZAÇÃO DOS OBJETOS
     -------------------------------------------------------*/
     /*Personagem*/
-    personagem = grid[28][31]; //Coluna 28 - Linha 31 (diferença de 6 linhas com a imagem)
+    personagem = grid[28][31];
     /*Espada*/
-    //grid[tam - 1][tam - 1].obstaculo = false;
-    espada = grid[tam - 1][tam - 1];
-    
+    espada = grid[2][1];
+    espada.custo = 0;
+    /*Dungeons*/
+    dungeon1 = grid[27][1];
+    dungeon1.custo = 0;
+    dungeon2 = grid[45][20];
+    dungeon2.custo = 0;
+    dungeon3 = grid[28][34];
+    dungeon3.custo = 0;
+    /*Objetivo*/
+    objetivo = dungeon1;
+
     blocosExpandidos.push(personagem);
 }
 
 function draw(){
-    //ATRIBUIÇÃO DAS CORES
+    /*------------------------------------------------------
+       ATRIBUIÇÃO DE CORES E TERRENO
+    -------------------------------------------------------*/
     background(0);
     for(var i = 0; i < tam; i++){
         for(var j = 0; j < tam; j++){
@@ -130,22 +118,37 @@ function draw(){
             minima = Math.min.apply(null, lista_distancia_cor);
             if(minima == parseInt(d_grama)){
                 grid[i][j].show(color(146, 208, 80));
+                grid[i][j].terreno = "Grama";
+                grid[i][j].custo = 10;
             }else if(minima == parseInt(d_areia)){
                 grid[i][j].show(color(196, 188, 150));
+                grid[i][j].terreno = "Areia";
+                grid[i][j].custo = 20;
             }else if(minima == parseInt(d_floresta)){
-                grid[i][j].show(color(0, 176, 80));
+                grid[i][j].show(color(35, 142, 35));
+                grid[i][j].terreno = "Floresta";
+                grid[i][j].custo = 100;
             }else if(minima == parseInt(d_montanha)){
                 grid[i][j].show(color(148, 138, 84));
+                grid[i][j].terreno = "Montanha";
+                grid[i][j].custo = 150;
             }else if(minima == parseInt(d_agua)){
                 grid[i][j].show(color(84, 141, 212));
+                grid[i][j].terreno = "Agua";
+                grid[i][j].custo = 180;
             }
         }
     }
-
     personagem.show(color(255, 0, 0));
     espada.show(color(154, 154, 154));
-    
-    //PERCURSO
+    dungeon1.show(color(0, 0, 0));
+    dungeon2.show(color(0, 0, 0));
+    dungeon3.show(color(0, 0, 0));
+
+    /*------------------------------------------------------
+      PERCURSO UTILIZANDO HEURÍSTICA A*
+    -------------------------------------------------------*/
+    //Bloco com menor valor f(x)
     if(blocosExpandidos.length > 0){
         var menorIndex = 0;
         for(var i = 0; i < blocosExpandidos.length; i++){
@@ -154,15 +157,10 @@ function draw(){
             }
         }
         var atual = blocosExpandidos[menorIndex];
-        if(atual === espada){
+        
+        //Objetivo encontrado, encerra execução
+        if(atual === objetivo){
             noLoop();
-            melhorCaminho = [];
-            var aux = atual;
-            melhorCaminho.push(aux);
-            while(aux.anterior){ //recursivo
-                melhorCaminho.push(aux.anterior);
-                aux = aux.anterior;
-            }
         }
         
         removeBloco(blocosExpandidos, atual);
@@ -172,8 +170,9 @@ function draw(){
         for(var i = 0; i < vizinhos.length; i++){
             var vizinho = vizinhos[i];
             
-            if(!blocosVisitados.includes(vizinho) && !vizinho.obstaculo){
-                var auxG = atual.g + 1;
+            if(!blocosVisitados.includes(vizinho)){
+                //var auxG = atual.g + 1;
+                var auxG = (atual.g + 1) + atual.custo;
                 var novoCaminho = false;
                 if(blocosExpandidos.includes(vizinho)){
                     if(auxG < vizinho.g){
@@ -187,36 +186,23 @@ function draw(){
                     blocosExpandidos.push(vizinho);
                 }
                 if(novoCaminho){
-                    vizinho.h = heuristic(vizinho, espada);
+                    //vizinho.h = heuristic(vizinho, objetivo);
+                    vizinho.h = abs(objetivo.i - vizinho.i) + abs(objetivo.j - vizinho.j);
                     vizinho.f = vizinho.g + vizinho.h;
                     vizinho.anterior = atual;
                 }
             }
         }
     }
-    else{
-        
-    }
-    //Coloração dos blocos visitados
-    for(var i = 0; i < blocosVisitados.length; i++){
-        //blocosVisitados[i].show(color(255, 255, 211));
-        //blocosVisitados[i].show(color(255, 255, 255));
-    }
-    //Coloração dos blocos expandidos
-    for(var i = 0; i < blocosExpandidos.length; i++){
-        //blocosExpandidos[i].show(color(255, 255, 255));
-    }
     
-    melhorCaminho = [];
+    var melhorCaminho = [];
     var aux = atual;
     melhorCaminho.push(aux);
+    var cont = 0;
     while(aux.anterior){ //recursivo
         melhorCaminho.push(aux.anterior);
+        melhorCaminho[cont].show(color(255, 165, 0));
         aux = aux.anterior;
-    }
-
-    //Coloração do melhor caminho
-    for(var i = 1; i < melhorCaminho.length - 1; i++){
-        melhorCaminho[i].show(color(0, 0, 0))
+        cont = cont + 1;
     }
 }
