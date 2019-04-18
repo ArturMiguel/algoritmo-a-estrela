@@ -126,9 +126,9 @@ function draw(){
     
     for(var i = 0; i < tam; i++){
         for(var j = 0; j < tam; j++){
-            if(lista_rgb[j][i][0] < 70){
-               grid[i][j].show(color(0, 176, 80))
-           }else{
+            if(lista_rgb[j][i][0] <= 70 && lista_rgb[j][i][1] <= 180){
+                grid[i][j].show(color(1000, 176, 80))
+            }else{
                 grid[i][j].show(color(lista_rgb[j][i][0], lista_rgb[j][i][1], lista_rgb[j][i][2]));
            }
         }
