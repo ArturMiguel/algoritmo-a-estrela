@@ -5,22 +5,13 @@ function removeBloco(arr, bloco){
         }
     }
 }
-
-/*function heuristic(inicio, fim){
-    var d1 = abs(fim.i - inicio.i);
-    var d2 = abs(fim.j - inicio.j);
-    var distancia = d1 + d2;
-    return distancia;
-}*/
-
-var tam = 48;
-var colunas = tam, linhas = tam;
-var grid = new Array(colunas);
-
-var blocosExpandidos = [], blocosVisitados = [];
-var personagem, espada, dungeon1, dungeon2, dungeon3, objetivo;
+var dataInicio = new Date();
+var tam = 42;
+var mapa = new Array(tam);
+var blocosAvaliados = []; //Conjunto de nós avaliados
+var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
+var personagem, lostwoods, dungeon1, dungeon2, dungeon3, objetivo;
 var w, h;
-var melhorCaminho = [];
 
 function Bloco(i, j){
     this.i = i;
@@ -32,73 +23,76 @@ function Bloco(i, j){
     this.anterior = "";
     this.terreno = "";
     this.custo = 0;
-    this.show = function(colunas){
-        fill(colunas);
-        rect(this.i * w, this.j * h, w - 1, h - 1);
+    this.show = function(tam){
+        stroke(100);
+        fill(tam);
+        rect(this.i * h, this.j * w, h - 1, w - 1);
     }  
-    //Vizinhos do nó atual podem estar à esquerda, à direita, acima ou abaixo.
-    this.addVizinhos = function(grid){
+    //Vizinhos do bloco atual podem estar à esquerda, à direita, acima ou abaixo.
+    this.addVizinhos = function(mapa){
         var i = this.i;
         var j = this.j;
-        if(i < colunas - 1){
-            this.vizinhos.push(grid[i + 1][j]);
+        if(mapa[i - 1] && mapa[i - 1][j]){ //Esquerda
+            this.vizinhos.push(mapa[i - 1][j]);
         }
-        if(i > 0){
-            this.vizinhos.push(grid[i - 1][j]);
+        if(mapa[i + 1] && mapa[i + 1][j]){ //Direita
+            this.vizinhos.push(mapa[i + 1][j]);
         }
-        if(j < linhas - 1){
-            this.vizinhos.push(grid[i][j + 1]);
+        if(mapa[i][j + 1]){ //Cima
+            this.vizinhos.push(mapa[i][j + 1]);
         }
-        if(j > 0){
-            this.vizinhos.push(grid[i][j - 1]);
+        if(mapa[i][j - 1]){ //Baixo
+            this.vizinhos.push(mapa[i][j - 1]);
         }
     }
 }
 
+/*------------------------------------------------------
+    INICIALIZAÇÃO DO MAPA
+-------------------------------------------------------*/
 function setup(){
-    createCanvas(1366, 1366);
-    w = width / colunas;
-    h = height / linhas;
+    createCanvas(1400, 1400);
+    h = height / tam;
+    w = width / tam;
     
-    //Array 2D
-    for(var i = 0; i < colunas; i++){
-        grid[i] = new Array(linhas);
+    //Criação do Array 2d
+    for(var i = 0; i < tam; i++){
+        mapa[i] = new Array(tam);
     }
-    for(var i = 0; i < colunas; i++){
-        for(var j = 0; j < linhas; j++){
-            grid[i][j] = new Bloco(i, j);
+    for(var i = 0; i < tam; i++){
+        for(var j = 0; j < tam; j++){
+            mapa[i][j] = new Bloco(i, j);
         }
     }
-    for(var i = 0; i < colunas; i++){
-        for(var j = 0; j < linhas; j++){
-            grid[i][j].addVizinhos(grid);
+    for(var i = 0; i < tam; i++){
+        for(var j = 0; j < tam; j++){
+            mapa[i][j].addVizinhos(mapa);
         }
     }
-    
     /*------------------------------------------------------
         DEFININDO A LOCALIZAÇÃO DOS OBJETOS
     -------------------------------------------------------*/
     /*Personagem*/
-    personagem = grid[28][31];
-    /*Espada*/
-    espada = grid[2][1];
-    espada.custo = 0;
+    personagem = mapa[25][28];
+    /*Lost woods*/
+    lostwoods = mapa[7][6];
+    lostwoods.custo = 0;
     /*Dungeons*/
-    dungeon1 = grid[27][1];
+    dungeon1 = mapa[27][1];
     dungeon1.custo = 0;
-    dungeon2 = grid[45][20];
+    dungeon2 = mapa[40][20];
     dungeon2.custo = 0;
-    dungeon3 = grid[6][37];
+    dungeon3 = mapa[6][37];
     dungeon3.custo = 0;
     /*Objetivo*/
-    objetivo = espada;
+    objetivo = lostwoods;
 
-    blocosExpandidos.push(personagem);
+    blocosNaoAvaliados.push(personagem);
 }
 
 function draw(){
     /*------------------------------------------------------
-       ATRIBUIÇÃO DE CORES E TERRENO
+       ATRIBUIÇÃO DE CORES E TERRENO/CUSTO
     -------------------------------------------------------*/
     background(0);
     for(var i = 0; i < tam; i++){
@@ -117,92 +111,98 @@ function draw(){
             lista_distancia_cor.push(parseInt(d_grama), parseInt(d_areia), parseInt(d_floresta), parseInt(d_montanha), parseInt(d_agua));
             minima = Math.min.apply(null, lista_distancia_cor);
             if(minima == parseInt(d_grama)){
-                grid[i][j].show(color(146, 208, 80));
-                grid[i][j].terreno = "Grama";
-                grid[i][j].custo = 10;
+                mapa[i][j].show(color(146, 208, 80));
+                mapa[i][j].terreno = "Grama";
+                mapa[i][j].custo = 10;
             }else if(minima == parseInt(d_areia)){
-                grid[i][j].show(color(196, 188, 150));
-                grid[i][j].terreno = "Areia";
-                grid[i][j].custo = 20;
+                mapa[i][j].show(color(196, 188, 150));
+                mapa[i][j].terreno = "Areia";
+                mapa[i][j].custo = 20;
             }else if(minima == parseInt(d_floresta)){
-                grid[i][j].show(color(35, 142, 35));
-                grid[i][j].terreno = "Floresta";
-                grid[i][j].custo = 100;
+                mapa[i][j].show(color(35, 142, 35));
+                mapa[i][j].terreno = "Floresta";
+                mapa[i][j].custo = 100;
             }else if(minima == parseInt(d_montanha)){
-                grid[i][j].show(color(148, 138, 84));
-                grid[i][j].terreno = "Montanha";
-                grid[i][j].custo = 150;
+                mapa[i][j].show(color(148, 138, 84));
+                mapa[i][j].terreno = "Montanha";
+                mapa[i][j].custo = 150;
             }else if(minima == parseInt(d_agua)){
-                grid[i][j].show(color(84, 141, 212));
-                grid[i][j].terreno = "Agua";
-                grid[i][j].custo = 180;
+                mapa[i][j].show(color(84, 141, 212));
+                mapa[i][j].terreno = "Agua";
+                mapa[i][j].custo = 180;
             }
         }
     }
-    personagem.show(color(255, 0, 0));
-    espada.show(color(154, 154, 154));
+    /*personagem.show(color(255, 0, 0));
+    lostwoods.show(color(154, 154, 154));
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
-    dungeon3.show(color(0, 0, 0));
+    dungeon3.show(color(0, 0, 0));*/
 
     /*------------------------------------------------------
       PERCURSO UTILIZANDO HEURÍSTICA A*
     -------------------------------------------------------*/
     //Bloco com menor valor f(x)
-    if(blocosExpandidos.length > 0){
-        var menorIndex = 0;
-        for(var i = 0; i < blocosExpandidos.length; i++){
-            if(blocosExpandidos[i].f < blocosExpandidos[menorIndex].f){
-                menorIndex = i;
-            }
+    var menorF = 0;
+    for(var i = 0; i < blocosNaoAvaliados.length; i++){
+        if(blocosNaoAvaliados[i].f < blocosNaoAvaliados[menorF].f){
+            menorF = i;
         }
-        var atual = blocosExpandidos[menorIndex];
-        
-        //Objetivo encontrado, encerra execução
-        if(atual === objetivo){
-            noLoop();
+    }
+    var atual = blocosNaoAvaliados[menorF];
+    
+    //Objetivo encontrado, encerra execução e mostra o melhor caminho
+    if(atual === objetivo){
+        /*var melhorCaminho = [], cont = 0;
+        while(atual.anterior){ //recursivo
+            atual.show(color(255, 150, 0));
+            melhorCaminho.push(atual.anterior);
+            atual = atual.anterior;
+            cont = cont + 1;
         }
-        
-        removeBloco(blocosExpandidos, atual);
-        blocosVisitados.push(atual);
+
+        var dataFinal = new Date();
+        var tempo = dataFinal - dataInicio;
+        var minutos = Math.floor((tempo % (1000 * 60 * 60)) / (1000 * 60));
+        var segundos = Math.floor((tempo % (1000 * 60)) / 1000);
+        alert("Encontrou em " +  minutos + " minuto(s) e " + segundos + " segundos");*/
+        noLoop();
+    }
+    else{
+        removeBloco(blocosNaoAvaliados, atual);
+        blocosAvaliados.push(atual);
         
         var vizinhos = atual.vizinhos;
         for(var i = 0; i < vizinhos.length; i++){
-            var vizinho = vizinhos[i];
-            
-            if(!blocosVisitados.includes(vizinho)){
-                //var auxG = atual.g + 1;
+            //Var vizinho = vizinhos[i];
+            if(!blocosAvaliados.includes(vizinhos[i])){
                 var auxG = (atual.g + 1) + atual.custo; //Adiciona o custo de terreno a cada passo
                 var novoCaminho = false;
-                if(blocosExpandidos.includes(vizinho)){
-                    if(auxG < vizinho.g){
-                        vizinho.g = auxG;
+                if(blocosNaoAvaliados.includes(vizinhos[i])){
+                    if(auxG < vizinhos[i].g){
+                        vizinhos[i].g = auxG;
                         novoCaminho = true;
                     }
                 }
                 else{
-                    vizinho.g = auxG;
+                    vizinhos[i].g = auxG;
                     novoCaminho = true;
-                    blocosExpandidos.push(vizinho);
+                    blocosNaoAvaliados.push(vizinhos[i]);
                 }
                 if(novoCaminho){
-                    //vizinho.h = heuristic(vizinho, objetivo);
-                    vizinho.h = abs(objetivo.i - vizinho.i) + abs(objetivo.j - vizinho.j); //Manhattan distance
-                    vizinho.f = vizinho.g + vizinho.h;
-                    vizinho.anterior = atual;
+                    vizinhos[i].h = abs(objetivo.i - vizinhos[i].i) + abs(objetivo.j - vizinhos[i].j); //Manhattan distance
+                    vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
+                    vizinhos[i].anterior = atual;
                 }
             }
         }
     }
-    
-    var melhorCaminho = [];
-    var aux = atual;
-    melhorCaminho.push(aux);
-    var cont = 0;
-    while(aux.anterior){ //recursivo
-        melhorCaminho.push(aux.anterior);
-        melhorCaminho[cont].show(color(255, 165, 0));
-        aux = aux.anterior;
+
+    /*var melhorCaminho = [], cont = 1;
+    while(atual.anterior){ //recursivo
+        atual.show(color(255, 150, 0));
+        melhorCaminho.push(atual.anterior);
+        atual = atual.anterior;
         cont = cont + 1;
-    }
+    }*/
 }
