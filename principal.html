@@ -7,9 +7,9 @@
         <!--<link rel="stylesheet" href="util/bootstrap-4.3.1-dist/css/bootstrap.min.css">-->
         <script src="matrizrgb/lista_rgb.js"></script>
         <script src="util/jquery-3.4.0.min.js"></script>
-        <script src="p5.min.js"></script> <!--Biblioteca para desenhos-->
+        <script src="util/p5.min.js"></script> <!--Biblioteca para desenhos-->
         <script src="principal.js"></script>
-        <script defer src=https://cdn.JsDelivr.net/npm/p5/lib/addons/p5.sound.min.js></script>
+        <script src="util/p5.sound.min.js"></script> <!--Reprodução de áudio-->
     </head>
     <body>
         <div class="container">
@@ -22,7 +22,7 @@
            </div>
            <div>
                <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
-               <button id="irDg1" onclick="location.href='dungeon1.html'" style="display: none">Ir para  dungeon 1</button>
+               <button id="irDg1" onclick="irDungeon('dungeon1.html')" style="display: none">Ir para  dungeon 1</button>
            </div>
            <div>
                <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
@@ -32,7 +32,19 @@
                <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem,  dungeon3, (255, 255, 255))">Buscar dungeon 3</button>
                <button id="irDg3" onclick="" style="display: none">Ir para  dungeon 3</button>
             </div>
-            <button onclick="location.href='principal.html'">Reiniciar</button>
+            <button onclick="setup()">Reiniciar</button>
+            <div id="content">
+
+            </div>
         </div>
     </body>
+    <script>
+        $(document).ready(function(){
+            audio = window.open("reproduzirMusica.html", "Audio", "width=700, height=600");
+        })
+        
+        function irDungeon(urlDungeon){
+            dg = window.open(urlDungeon, "Dungeon", "width=1366, height=1366");
+        }
+    </script>
 </head>
