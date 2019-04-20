@@ -1,99 +1,6 @@
-function removeBloco(arr, bloco){
-    for(var i = arr.length - 1; i >= 0; i--){
-        if(arr[i] == bloco){
-            arr.splice(i, 1);
-        }
-    }
-}
-var dataInicio = new Date();
-var tam = 42;
-var mapa = new Array(tam);
-var blocosAvaliados = []; //Conjunto de nós avaliados
-var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
-var personagem, lostwoods, dungeon1, dungeon2, dungeon3, objetivo;
-var w, h;
-
-function Bloco(i, j){
-    this.i = i;
-    this.j = j;
-    this.f = 0; //Distância total do inicio até o objetivo f(n) = g(n) + h(n)
-    this.g = 0;  //Distância do nó inicial até o atual
-    this.h = 0; //Heuristica utilizada para calcular a distância do nó atual até o nó objetivo
-    this.vizinhos = [];
-    this.anterior = "";
-    this.terreno = "";
-    this.custo = 0;
-    this.show = function(tam){
-        stroke(100);
-        fill(tam);
-        rect(this.i * h, this.j * w, h - 1, w - 1);
-    }  
-    //Vizinhos do bloco atual podem estar à esquerda, à direita, acima ou abaixo.
-    this.addVizinhos = function(mapa){
-        var i = this.i;
-        var j = this.j;
-        if(mapa[i - 1] && mapa[i - 1][j]){ //Esquerda
-            this.vizinhos.push(mapa[i - 1][j]);
-        }
-        if(mapa[i + 1] && mapa[i + 1][j]){ //Direita
-            this.vizinhos.push(mapa[i + 1][j]);
-        }
-        if(mapa[i][j + 1]){ //Cima
-            this.vizinhos.push(mapa[i][j + 1]);
-        }
-        if(mapa[i][j - 1]){ //Baixo
-            this.vizinhos.push(mapa[i][j - 1]);
-        }
-    }
-}
-
-/*------------------------------------------------------
-    INICIALIZAÇÃO DO MAPA
--------------------------------------------------------*/
-function setup(){
-    createCanvas(1400, 1400);
-    h = height / tam;
-    w = width / tam;
-    
-    //Criação do Array 2d
-    for(var i = 0; i < tam; i++){
-        mapa[i] = new Array(tam);
-    }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
-            mapa[i][j] = new Bloco(i, j);
-        }
-    }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
-            mapa[i][j].addVizinhos(mapa);
-        }
-    }
-    /*------------------------------------------------------
-        DEFININDO A LOCALIZAÇÃO DOS OBJETOS
-    -------------------------------------------------------*/
-    /*Personagem*/
-    personagem = mapa[24][27];
-    /*Lost woods*/
-    lostwoods = mapa[6][6];
-    /*Dungeons*/
-    dungeon1 = mapa[24][1];
-    dungeon2 = mapa[39][17];
-    dungeon3 = mapa[5][32];
-   // dungeon3 = mapa[24][30];
-    /*Objetivo*/
-    objetivo = dungeon3;
-
-    blocosNaoAvaliados.push(personagem);
-}
-
-function draw(){
-    /*------------------------------------------------------
-       ATRIBUIÇÃO DE CORES E TERRENO/CUSTO
-    -------------------------------------------------------*/
-    background(0);
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
+function coloreMapa(mapa, tamanho, lista_rgb){
+    for(var i = 0; i < tamanho; i++){
+        for(var j = 0; j < tamanho; j++){
             lista_distancia_cor = []
             d_grama = Math.sqrt(pow((lista_rgb[j][i][0] - 146), 2) + pow((lista_rgb[j][i][1] - 208),2) +
             pow((lista_rgb[j][i][2] - 80), 2));
@@ -130,21 +37,118 @@ function draw(){
             }
         }
     }
+}
+
+function removeBloco(arr, bloco){
+    for(var i = arr.length - 1; i >= 0; i--){
+        if(arr[i] == bloco){
+            arr.splice(i, 1);
+        }
+    }
+}
+
+var dataInicio = new Date();
+var tam = 42;
+var mapa = new Array(tam);
+var blocosAvaliados = []; //Conjunto de nós avaliados
+var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
+var personagem, lostwoods, dungeon1, dungeon2, dungeon3, objetivo;
+var w, h;
+
+function Bloco(i, j){
+    this.i = i;
+    this.j = j;
+    this.f = 0; //Distância total do inicio até o objetivo f(n) = g(n) + h(n)
+    this.g = 0;  //Distância do nó inicial até o atual
+    this.h = 0; //Heuristica utilizada para calcular a distância do nó atual até o nó objetivo
+    this.vizinhos = [];
+    this.anterior = "";
+    this.terreno = "";
+    this.custo = 0;
+    this.obstaculo = false;
+
+    this.show = function(tam){
+        stroke(100);
+        fill(tam);
+        rect(this.i * h, this.j * w, h - 1, w - 1);
+    }
+
+    if(this.terreno == "Escuro"){
+        this.obstaculo = true;
+    }
+
+    this.addVizinhos = function(mapa){
+        var i = this.i;
+        var j = this.j;
+        if(mapa[i - 1] && mapa[i - 1][j]) this.vizinhos.push(mapa[i - 1][j]); //Esquerda
+        if(mapa[i + 1] && mapa[i + 1][j]) this.vizinhos.push(mapa[i + 1][j]); //Direita
+        if(mapa[i][j + 1]) this.vizinhos.push(mapa[i][j + 1]); //Cima
+        if(mapa[i][j - 1]) this.vizinhos.push(mapa[i][j - 1]); //Baixo
+    }
+}
+
+/*------------------------------------------------------
+    INICIALIZAÇÃO DO MAPA
+-------------------------------------------------------*/
+function setup(){
+    createCanvas(1400, 1400);
+    h = height / tam;
+    w = width / tam;
+    
+    //Criação do Array 2d
+    for(var i = 0; i < tam; i++){
+        mapa[i] = new Array(tam);
+    }
+    for(var i = 0; i < tam; i++){
+        for(var j = 0; j < tam; j++){
+            mapa[i][j] = new Bloco(i, j);
+        }
+    }
+    for(var i = 0; i < tam; i++){
+        for(var j = 0; j < tam; j++){
+            mapa[i][j].addVizinhos(mapa);
+        }
+    }
+    
+    /*------------------------------------------------------
+        DEFININDO A LOCALIZAÇÃO DOS OBJETOS
+    -------------------------------------------------------*/
+    //personagem = mapa[14][26];/*
+    personagem = mapa[24][27];
+    lostwoods = mapa[6][6];
+    dungeon1 = mapa[24][1];
+    dungeon2 = mapa[39][17];
+    //dungeon3 = mapa[5][32];
+    dungeon3 = mapa[24][30];
+    objetivo = dungeon3;
+    //objetivo = mapa[13][3];
+    
+
+    blocosNaoAvaliados.push(personagem);
+}
+
+function draw(){
+    /*------------------------------------------------------
+    ATRIBUIÇÃO DE CORES E TERRENO/CUSTO
+    -------------------------------------------------------*/
+    background(0);
+    coloreMapa(mapa, tam, lista_rgb_principal);
+
     personagem.show(color(255, 0, 0));
     lostwoods.show(color(154, 154, 154));
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
     dungeon3.show(color(0, 0, 0));
+    objetivo.show(color(0, 0, 0));
 
     /*------------------------------------------------------
-      PERCURSO UTILIZANDO HEURÍSTICA A*
+    PERCURSO UTILIZANDO HEURÍSTICA A*
     -------------------------------------------------------*/
     //Bloco com menor valor f(x)
     var menorF = 0;
     for(var i = 0; i < blocosNaoAvaliados.length; i++){
-        if(blocosNaoAvaliados[i].f < blocosNaoAvaliados[menorF].f){
+        if(blocosNaoAvaliados[i].f < blocosNaoAvaliados[menorF].f)
             menorF = i;
-        }
     }
     var atual = blocosNaoAvaliados[menorF];
     
@@ -154,8 +158,7 @@ function draw(){
         var tempo = dataFinal - dataInicio;
         var minutos = Math.floor((tempo % (1000 * 60 * 60)) / (1000 * 60));
         var segundos = Math.floor((tempo % (1000 * 60)) / 1000);
-        alert("Encontrou em " +  minutos + " minuto(s) e " + segundos + " segundo(s)");
-      
+    
         var melhorCaminho = [];
         var aux = atual;
         while(aux.anterior){ //recursivo
@@ -163,13 +166,15 @@ function draw(){
             aux = aux.anterior;
         }
         for(var i = melhorCaminho.length - 2; i >= 0; i--){
-            melhorCaminho[i].show(color(144, 144, 144));
+            melhorCaminho[i].show(color(255, 0, 0));
             alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
             //console.log(melhorCaminho[i]);
         }
         alert("F(n) = " + atual.f + "\nG(n) = " +atual.g + "\nH(n) = " + atual.h);
-        document.getElementById("tempo").innerHTML = "Tempo: " +  minutos + " minuto(s) e " + segundos + " segundo(s)";
-        document.getElementById("custo").innerHTML = "Custo: F(n) = " + atual.f;
+        $("#tempo").html("Tempo: " +  minutos + " minuto(s) e " + segundos + " segundo(s)");
+        $("#custo").html("Custo: F(n) = " + atual.f);
+
+        $("#botao").html("<button  onclick=location.href='dungeon1.html' style='width: 500px; height: 100px; font-size: 30px'>Entrar na dungeon encontrada</button>");
         noLoop();
     }
     else{
@@ -178,7 +183,7 @@ function draw(){
         
         var vizinhos = atual.vizinhos;
         for(var i = 0; i < vizinhos.length; i++){
-            if(!blocosAvaliados.includes(vizinhos[i])){
+            if(!blocosAvaliados.includes(vizinhos[i]) && !vizinhos[i].obstaculo){
                 var auxG = atual.g + atual.custo; //Adiciona o custo de terreno a cada passo
                 var novoCaminho = false;
                 if(blocosNaoAvaliados.includes(vizinhos[i])){
@@ -199,12 +204,5 @@ function draw(){
                 }
             }
         }
-    }
-
-    var melhorCaminho = [];
-    var aux = atual;
-    while(aux.anterior){
-        melhorCaminho.push(aux);
-        aux = aux.anterior;
     }
 }
