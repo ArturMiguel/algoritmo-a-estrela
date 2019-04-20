@@ -15,4 +15,8 @@ Trabalho para a discipina de Inteligência Artificial aplicando o algoritmo A* (
 
 > [imageio](https://imageio.github.io/)
 
+### Créditos
+[Artur Miguel](https://github.com/ArturMiguel)
+[Diego Dias Pereira](https://github.com/diegoptc/)
+
 ![Gif não encontrado](https://i.imgur.com/5ZhjPA6.gif)
