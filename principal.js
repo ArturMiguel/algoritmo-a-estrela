@@ -104,18 +104,18 @@ function setup(){
             mapa[i][j].addVizinhos(mapa);
         }
     }
-    
-    /*------------------------------------------------------
-        DEFININDO LOCALIZAÇÃO E CORES
-    -------------------------------------------------------*/
-    //personagem = mapa[14][26];/*
+
+    coloreMapa(mapa, tam, lista_rgb_principal);
+
     personagem = mapa[24][27];
     lostwoods = mapa[6][6];
     dungeon1 = mapa[24][1];
     dungeon2 = mapa[39][17];
     dungeon3 = mapa[5][32];
+    dungeon1.terreno = "Dungeon 1";
+    dungeon2.terreno = "Dungeon 2";
+    dungeon3.terreno = "Dungeon 3";
 
-    coloreMapa(mapa, tam, lista_rgb_principal);
     personagem.show(color(255, 0, 0));
     lostwoods.show(color(154, 154, 154));
     dungeon1.show(color(0, 0, 0));
@@ -123,9 +123,10 @@ function setup(){
     dungeon3.show(color(0, 0, 0));
 }
 
-function busca(blocosA, blocosNaoA, meta, corCaminho){
+function busca(blocosA, blocosNaoA, inicio, meta){
+    setup();
     blocosA = []; blocosNaoA = [];
-    blocosNaoA.push(personagem);
+    blocosNaoA.push(inicio);
 
     var menorF = 0; //Bloco com menor valor f(n)
     for(var i = 0; i < blocosNaoA.length; i++){
@@ -152,11 +153,24 @@ function busca(blocosA, blocosNaoA, meta, corCaminho){
                 aux = aux.anterior;
             }
             for(var i = melhorCaminho.length - 2; i >= 0; i--){
-                melhorCaminho[i].show(color(corCaminho));
+                melhorCaminho[i].show(color(255, 0, 0));
                 alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
                 //console.log(melhorCaminho[i]);
             }
             alert("F(n) = " + atual.f + "\nG(n) = " +atual.g + "\nH(n) = " + atual.h);
+        
+            if(atual.terreno == "Dungeon 1"){
+                $("#dg1").html("Dungeon 1 -> f(n) = " + atual.f);
+                $("#irDg1").show();
+            }
+            else if(atual.terreno == "Dungeon 2"){
+                $("#dg2").html("Dungeon 2 -> f(n) = " + atual.f);
+                $("#irDg2").show();
+            }
+            else if(atual.terreno == "Dungeon 3"){
+                $("#dg3").html("Dungeon 3 -> f(n) = " + atual.f);
+                $("#irDg3").show();
+            }
             return atual.f;
         }
         else{
@@ -165,7 +179,7 @@ function busca(blocosA, blocosNaoA, meta, corCaminho){
             
             var vizinhos = atual.vizinhos;
             for(var i = 0; i < vizinhos.length; i++){
-                if(!blocosA.includes(vizinhos[i]) && !vizinhos[i].obstaculo){
+                if(!blocosA.includes(vizinhos[i])){
                     var auxG = atual.g + atual.custo; //Adiciona o custo de terreno a cada passo
                     var novoCaminho = false;
                     if(blocosNaoA.includes(vizinhos[i])){
@@ -189,8 +203,4 @@ function busca(blocosA, blocosNaoA, meta, corCaminho){
         }
         
     }
-}
-
-function draw(){
-    noLoop();
 }

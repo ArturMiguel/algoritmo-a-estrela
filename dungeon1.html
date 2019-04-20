@@ -3,24 +3,26 @@
     <head>
         <meta charset="UTF-8">
         <title>Algoritmo A*</title>
-        <!--<link rel="stylesheet" href="util/folha.css">-->
+        <link rel="stylesheet" href="util/folha.css">
         <script src="matrizrgb/lista_rgb.js"></script>
         <script src="util/jquery-3.4.0.min.js"></script>
         <script src="p5.min.js"></script> <!--Biblioteca para desenhos-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
         <script src="dungeon1.js"></script>
+        <script defer src=https://cdn.JsDelivr.net/npm/p5/lib/addons/p5.sound.min.js></script>
     </head>
     <body>
         <div class="container">
-            <div>
-                <h1>Algoritmo A* - Dungeon 1</h1>
+           <div>
+                <h1>Algoritmo A* - Mapa principal</h1>
+                <h1 id="joia"></h1>
+                <h1 id="saida"></h1>
                 <h1 id="tempo"></h1>
-                <h1 id="custo"></h1>
-            </div>
-            <div id="botao">
-
-            </div>
-            <div id="sketch01"> </div>
+           </div>
+           <div>
+               <button id="irJoia" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, joia, 'buscar')">Buscar joia</button>
+               <button id="irSaida" style="display: none" onclick="busca(blocosAvaliados, blocosNaoAvaliados, joia, personagem, 'sair')">Buscar saida</button>
+               <button id="irMapa" style="display: none" onclick="window.history.back();">Voltar ao mapa</button>
+           </div>
         </div>
     </body>
 </head>
