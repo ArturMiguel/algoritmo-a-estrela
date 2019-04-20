@@ -4,20 +4,26 @@
         <meta charset="UTF-8">
         <title>Algoritmo A*</title>
         <link rel="stylesheet" href="util/folha.css">
+        <!--<link rel="stylesheet" href="util/bootstrap-4.3.1-dist/css/bootstrap.min.css">-->
         <script src="matrizrgb/lista_rgb.js"></script>
         <script src="util/jquery-3.4.0.min.js"></script>
         <script src="p5.min.js"></script> <!--Biblioteca para desenhos-->
         <script src="principal.js"></script>
+        <script defer src=https://cdn.JsDelivr.net/npm/p5/lib/addons/p5.sound.min.js></script>
     </head>
     <body>
         <div class="container">
-           <div>
+           <div class="form-group">
                 <h1>Algoritmo A* - Mapa principal</h1>
+                <h1 id="dg1"></h1>
+                <h1 id="dg2"></h1>
+                <h1 id="dg3"></h1>
                 <h1 id="tempo"></h1>
-                <h1 id="custo"></h1>
            </div>
-           <div id="botao">
-
+           <div class="form-group">
+               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
+               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
+               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, dungeon3, (255, 255, 255))">Buscar dungeon 3</button>
            </div>
         </div>
     </body>

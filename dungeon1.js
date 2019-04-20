@@ -100,7 +100,15 @@ function setup(){
     objetivo = joia;
 
     blocosNaoAvaliados.push(personagem);
+
+    button = createButton('reset');
+    button.mousePressed(resetS);
 }
+
+function resetS(){
+   draw();
+}
+
 
 function draw(){
     /*------------------------------------------------------
@@ -145,7 +153,7 @@ function draw(){
         $("#tempo").html("Tempo: " +  minutos + " minuto(s) e " + segundos + " segundo(s)");
         $("#custo").html("Custo: F(n) = " + atual.f);
 
-        $("#botao").html("<button  onclick=location.href='principal.html' style='width: 500px; height: 100px; font-size: 30px'>Sair da dungeon</button>");
+        $("#botao").html("<button  onclick=window.history.back(); style='width: 500px; height: 100px; font-size: 30px'>Sair da dungeon</button>");
         noLoop();
     }
     else{
