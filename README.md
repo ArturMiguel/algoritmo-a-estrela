@@ -15,7 +15,7 @@ Trabalho para a discipina de Inteligência Artificial aplicando o algoritmo A* (
 
 > [imageio](https://imageio.github.io/)
 
-###
+###.
 > [Artur Miguel](https://github.com/ArturMiguel)
 
 > [Diego Dias Pereira](https://github.com/diegoptc/)
