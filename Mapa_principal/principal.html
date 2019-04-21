@@ -3,13 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>Algoritmo A*</title>
-        <link rel="stylesheet" href="util/folha.css">
-        <!--<link rel="stylesheet" href="util/bootstrap-4.3.1-dist/css/bootstrap.min.css">-->
-        <script src="matrizrgb/lista_rgb.js"></script>
-        <script src="util/jquery-3.4.0.min.js"></script>
-        <script src="util/p5.min.js"></script> <!--Biblioteca para desenhos-->
+        <link rel="stylesheet" href="../Dependencias/folha.css">
+        <script src="../matrizrgb/lista_rgb.js"></script>
+        <script src="../Dependencias/jquery-3.4.0.min.js"></script>
+        <script src="../Dependencias/p5.min.js"></script>
         <script src="principal.js"></script>
-        <script src="util/p5.sound.min.js"></script> <!--Reprodução de áudio-->
     </head>
     <body>
         <div class="container">
@@ -22,7 +20,7 @@
            </div>
            <div>
                <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
-               <button id="irDg1" onclick="irDungeon('dungeon1.html')" style="display: none">Ir para  dungeon 1</button>
+               <button id="irDg1" onclick="irDungeon('../Dungeon_1/dungeon1.html')" style="display: none">Ir para  dungeon 1</button>
            </div>
            <div>
                <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
@@ -40,7 +38,7 @@
     </body>
     <script>
         $(document).ready(function(){
-            audio = window.open("reproduzirMusica.html", "Audio", "width=700, height=600");
+            audio = window.open("../Audio/reproduzirMusica.html", "Audio", "width=700, height=600");
         })
         
         function irDungeon(urlDungeon){
