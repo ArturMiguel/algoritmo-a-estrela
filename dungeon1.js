@@ -98,46 +98,39 @@ function setup(){
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
-    setup(); //Reinicia o mapa, não o html
-    blocosA = []; blocosNaoA = [];
+    setup();
+    blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
 
-    var menorF = 0; //Bloco com menor valor f(n)
-    for(var i = 0; i < blocosNaoA.length; i++){
-        if(blocosNaoA[i].f < blocosNaoA[menorF].f)
-            menorF = i; 
-    }
-    var atual = blocosNaoA[menorF];
-    
-    //Objetivo encontrado, encerra execução e mostra o melhor caminho
+    //O bloco que será avaliado é o com menor valor f(n)
     while(atual != meta){
         var menorF = 0;
         for(var i = 0; i < blocosNaoA.length; i++){
             if(blocosNaoA[i].f < blocosNaoA[menorF].f)
                 menorF = i;
         }
-        atual = blocosNaoA[menorF];
+        var atual = blocosNaoA[menorF];
 
+        //Se o bloco atual for o objetivo (meta) encerra a execução
         if(atual === meta){
             noLoop();
             var melhorCaminho = [];
             var aux = atual;
-            while(aux.anterior){ //recursivo
+            while(aux.anterior){
                 melhorCaminho.push(aux.anterior);
                 aux = aux.anterior;
             }
             for(var i = melhorCaminho.length - 2; i >= 0; i--){
                 melhorCaminho[i].show(color(255, 0, 0));
                 alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
-                //console.log(melhorCaminho[i]);
             }
-            alert("F(n) = " + atual.f + "\nG(n) = " +atual.g + "\nH(n) = " + atual.h);
+            alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
 
             if(tipoBusca === 'buscar'){
                 $("#joia").html("Joia -> f(n) = " + atual.f);
                 $("#irSaida").show()
             }
-            else{ //posição inicial do personagem
+            else{
                 $("#saida").html("Saída -> f(n) = " + atual.f);
                 $("#irMapa").show()
             }
@@ -148,22 +141,25 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
             blocosA.push(atual);
             
             var vizinhos = atual.vizinhos;
+            //Percorre os vizinhos do bloco atual
             for(var i = 0; i < vizinhos.length; i++){
+                //Ignora os blocos vizinhos que já foram avaliados
                 if(!blocosA.includes(vizinhos[i]) && !vizinhos[i].obstaculo){
-                    var auxG = atual.g + atual.custo; //Adiciona o custo de terreno a cada passo
+                    var atualG = atual.g + atual.custo; //Custo do inicio (bloco atual) até seu vizinho
                     var novoCaminho = false;
+                    //Avalia os blocos vizinhos ainda não avaliados
                     if(blocosNaoA.includes(vizinhos[i])){
-                        if(auxG < vizinhos[i].g){
-                            vizinhos[i].g = auxG;
+                        if(vizinhos[i].g > atualG){
                             novoCaminho = true;
                         }
                     }
                     else{
-                        vizinhos[i].g = auxG;
                         novoCaminho = true;
                         blocosNaoA.push(vizinhos[i]);
                     }
+                    //Armazena o melhor caminho até o momento
                     if(novoCaminho){
+                        vizinhos[i].g = atualG;
                         vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
                         vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
                         vizinhos[i].anterior = atual;
@@ -171,6 +167,5 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
                 }
             }
         }
-        
     }
 }
