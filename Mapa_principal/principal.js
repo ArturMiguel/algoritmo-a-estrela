@@ -39,19 +39,11 @@ function coloreMapa(mapa, tamanho, lista_rgb){
     }
 }
 
-function removeBloco(arr, bloco){
-    for(var i = arr.length - 1; i >= 0; i--){
-        if(arr[i] == bloco){
-            arr.splice(i, 1);
-        }
-    }
-}
-
 var tam = 42;
 var mapa = new Array(tam);
 var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
-var personagem, lostwoods, dungeon1, dungeon2, dungeon3, objetivo;
+var personagem, lostwoods, dungeon1, dungeon2, dungeon3;
 var w, h;
 
 function Bloco(i, j){
@@ -60,18 +52,16 @@ function Bloco(i, j){
     this.f = 0; //Distância total do inicio até o objetivo f(n) = g(n) + h(n)
     this.g = 0;  //Distância do nó inicial até o atual
     this.h = 0; //Heuristica utilizada para calcular a distância do nó atual até o nó objetivo
+    this.custo = 0;
     this.vizinhos = [];
     this.anterior = "";
     this.terreno = "";
-    this.nome = "";
-    this.custo = 0;
-
+    this.local = "";
     this.show = function(cor){
         stroke(100);
         fill(cor);
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
-
     this.addVizinhos = function(mapa){
         var i = this.i;
         var j = this.j;
@@ -82,17 +72,12 @@ function Bloco(i, j){
     }
 }
 
-/*------------------------------------------------------
-    INICIALIZAÇÃO DO MAPA
--------------------------------------------------------*/
 function setup(){
     background(0);
     createCanvas(1400, 1400);
     h = height / tam;
     w = width / tam;
-    
-    //Criação do Array 2d
-    for(var i = 0; i < tam; i++){
+    for(var i = 0; i < tam; i++){ //Criação do Array 2d
         mapa[i] = new Array(tam);
     }
     for(var i = 0; i < tam; i++){
@@ -105,111 +90,109 @@ function setup(){
             mapa[i][j].addVizinhos(mapa);
         }
     }
-
     coloreMapa(mapa, tam, lista_rgb_principal);
-
     personagem = mapa[24][27];
     lostwoods = mapa[6][6];
     dungeon1 = mapa[24][1];
     dungeon2 = mapa[39][17];
     dungeon3 = mapa[5][32];
-    personagem.nome = "Casa do Link";
-    dungeon1.nome = "Dungeon 1";
-    dungeon2.nome = "Dungeon 2";
-    dungeon3.nome = "Dungeon 3";
-
-    //personagem.show(color(255, 0, 0));
+    personagem.local = "Casa do Link";
+    lostwoods.local = "Lostwoods";
+    dungeon1.local = "Dungeon 1";
+    dungeon2.local = "Dungeon 2";
+    dungeon3.local = "Dungeon 3";
     lostwoods.show(color(154, 154, 154));
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
     dungeon3.show(color(0, 0, 0));
 }
 
-function calculaTempo(dataI, dataF){
-    var difMs = (dataF - dataI); //Diferença em milissegundos entre data inicial e data final
-    var difMin = Math.round(((difMs % 86400000) % 3600000) / 60000); //Minutos
-    var difSec = Math.floor(difMs / 1000); //Segundos
-    $("#tempo").html("Tempo: " + difMin + " minuto(s), " + difSec + " segundo(s)");
+
+function entrarDungeon(bloco, id, urlPagina){
+    var ir = confirm("Entrar na " + bloco.local + "?");
+    if(ir){
+        $(id).hide();
+        window.open(urlPagina);
+    }
+}
+
+function desenharCaminho(atual, inicio){
+    var melhorCaminho = [];
+    var aux = atual;
+    while(aux.anterior){
+        melhorCaminho.push(aux.anterior);
+        aux = aux.anterior;
+    }
+    for(var i = melhorCaminho.length - 2; i >= 0; i--){
+        melhorCaminho[melhorCaminho.length - 1].show(color(255, 0, 0));
+        melhorCaminho[i].show(color(255, 0, 0));
+        alert("F(n) = " + (melhorCaminho[i].f - inicio.custo) + "\nG(n) = " + (melhorCaminho[i].g - inicio.custo) + "\nH(n) = " + melhorCaminho[i].h);
+    }
+    alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
+}
+
+function removeBloco(arr, bloco){
+    for(var i = arr.length - 1; i >= 0; i--){
+        if(arr[i] == bloco){
+            arr.splice(i, 1);
+        }
+    }
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta){
-    var dataInicial = new Date();
     setup();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
     
     while(atual != meta){
-        //O bloco que será avaliado é o com menor valor f(n)
-        var menorF = 0;
+        var menorF = 0; //O bloco que será avaliado é o com menor valor f(n)
         for(var i = 0; i < blocosNaoA.length; i++){
             if(blocosNaoA[i].f < blocosNaoA[menorF].f)
                 menorF = i;
         }
         var atual = blocosNaoA[menorF];
-
-        //Se o bloco atual for o objetivo (meta) encerra a execução
-        if(atual === meta){
-            var dateFinal = new Date();
-            calculaTempo(dataInicial, dateFinal);
-
-            noLoop();
-            var melhorCaminho = [];
-            var aux = atual;
-            while(aux.anterior){
-                melhorCaminho.push(aux.anterior);
-                aux = aux.anterior;
+        if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
+            noLoop(); 
+            if(!(atual.f - meta.custo < 0)){
+                atual.f = atual.f - meta.custo; //Desconsidera os custos iniciais
+                atual.g = atual.g - meta.custo;
             }
-            for(var i = melhorCaminho.length - 2; i >= 0; i--){
-                melhorCaminho[i].show(color(255, 0, 0));
-                alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
+            desenharCaminho(atual, inicio);
+            if(atual.local == "Dungeon 1"){
+                $("#custoDg1").html(inicio.local + " até Dungeon 1: F(n) = " + atual.f + " H(n) = " + atual.h + " F(n) = " + atual.f);
+                entrarDungeon(atual, "#irDg1", "../Dungeon_1/dungeon1.html", "Dungeon");
+            }else if(atual.local == "Dungeon 2"){
+                $("#custoDg2").html(inicio.local + " até Dungeon 2: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+                //entrarDungeon(atual, "#irDg2", "../Dungeon_2/dungeon2.html", "Dungeon"); //Dungeon 2 ainda não existe
+            }else if(atual.local == "Dungeon 3"){
+                $("#custoDg3").html(inicio.local + " até Dungeon 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+                //entrarDungeon(atual, "#irDg3", "../Dungeon_3/dungeon3.html", "Dungeon"); //Dungeon 3 ainda não existe
+            }else if(atual.local == "Lostwoods"){ //Precisa fazer alguma função para ficar disponível apenas quando as 3 joias forem recuperadas
+                $("#custoLostwoods").html(inicio.local + " até Lostwoods 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+                window.open("../Audio/reproduzirMusica.html", "Audio", "width=700, height=600");
             }
-            alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
-            $("#custo").html("f(n) = " + atual.f);
             personagem = mapa[atual.i][atual.j];
-            
-            if(atual.nome == "Dungeon 1"){
-                var ir = confirm("Ir para " + atual.nome + "?");
-                if(ir){
-                    $("#irDg1").hide();
-                    window.open("../Dungeon_1/dungeon1.html", "Dungeon");
-                }
-            }
-            else if(atual.nome == "Dungeon 2"){
-                //$("#irDg2").hide();
-                alert("Dungeon 2 em construção!");
-            }
-            else if(atual.nome == "Dungeon 3"){
-                //$("#irDg3").hide();
-                alert("Dungeon 3 em construção!");
-            }
-            return atual.f;
-        }
-        else{
+        }else{
             removeBloco(blocosNaoA, atual);
             blocosA.push(atual);
-            
             var vizinhos = atual.vizinhos;
-            //Percorre os vizinhos do bloco atual
-            for(var i = 0; i < vizinhos.length; i++){
-                 //Ignora os blocos vizinhos que já foram avaliados
-                if(!blocosA.includes(vizinhos[i])){
+            for(var i = 0; i < vizinhos.length; i++){ //Percorre os vizinhos do bloco atual
+                
+                if(!blocosA.includes(vizinhos[i])){ //Ignora os blocos vizinhos que já foram avaliados
                     var atualG = atual.g + atual.custo; //Custo do bloco atual até seu vizinho considerando o terreno
                     var novoCaminho = false;
-                    //Avalia os blocos vizinhos ainda não avaliados
-                    if(blocosNaoA.includes(vizinhos[i])){
+                    if(blocosNaoA.includes(vizinhos[i])){ //Avalia os blocos vizinhos ainda não avaliados
                         if(vizinhos[i].g > atualG){
                             novoCaminho = true;
                         }
-                    }
-                    else{
+                    }else{
                         novoCaminho = true;
                         blocosNaoA.push(vizinhos[i]);
                     }
-                    //Armazena o melhor caminho até o momento
-                    if(novoCaminho){
+                    if(novoCaminho){ //Salva o melhor caminho até o momento
                         vizinhos[i].g = atualG;
                         vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
-                        vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
+                        vizinhos[i].f = (vizinhos[i].g + vizinhos[i].h);
                         vizinhos[i].anterior = atual;
                     }
                 }

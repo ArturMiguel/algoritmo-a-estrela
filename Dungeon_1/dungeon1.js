@@ -6,13 +6,11 @@ function coloreMapa(mapa, tamanho, lista_rgb){
             parte_clara = Math.sqrt(pow((lista_rgb[j][i][0] - 207), 2) + pow((lista_rgb[j][i][1] - 207), 2) + pow((lista_rgb[j][i][2] - 207), 2));
             lista_distancia_cor.push(parseInt(parte_escura), parseInt(parte_clara));
             minima = Math.min.apply(null, lista_distancia_cor);
-
             if(minima == parseInt(parte_escura)){
                 mapa[i][j].show(color(160, 160, 160));
                 mapa[i][j].terreno = "Escuridao";
                 mapa[i][j].obstaculo = true;
-            }
-            else{
+            }else{
                 mapa[i][j].show(color(255, 255, 255));
                 mapa[i][j].terreno = "Luz";
                 mapa[i][j].custo = 10;
@@ -35,7 +33,6 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, joia;
 var w, h;
-
 function Bloco(i, j){
     this.i = i;
     this.j = j;
@@ -47,13 +44,11 @@ function Bloco(i, j){
     this.terreno = "";
     this.custo = 0;
     this.obstaculo = false;
-
     this.show = function(cor){
         stroke(100);
         fill(cor);
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
-
     this.addVizinhos = function(mapa){
         var i = this.i;
         var j = this.j;
@@ -64,17 +59,12 @@ function Bloco(i, j){
     }
 }
 
-/*------------------------------------------------------
-    INICIALIZAÇÃO DO MAPA
--------------------------------------------------------*/
 function setup(){
     background(0);
     createCanvas(1400, 1400);
     h = height / tam;
     w = width / tam;
-    
-    //Criação do Array 2d
-    for(var i = 0; i < tam; i++){
+    for(var i = 0; i < tam; i++){ //Criação do Array 2d
         mapa[i] = new Array(tam);
     }
     for(var i = 0; i < tam; i++){
@@ -87,79 +77,68 @@ function setup(){
             mapa[i][j].addVizinhos(mapa);
         }
     }
-
     coloreMapa(mapa, tam, lista_rgb_dg1);
-
     personagem = mapa[14][26];
     joia = mapa[13][3];
-
-    personagem.show(color(255, 0, 0));
     joia.show(color(255, 255, 0));
+    mapa[14][26].show(color(0));
+}
+
+function desenharCaminho(atual, inicio){
+    var melhorCaminho = [];
+    var aux = atual;
+    while(aux.anterior){
+        melhorCaminho.push(aux.anterior);
+        aux = aux.anterior;
+    }
+    for(var i = melhorCaminho.length - 2; i >= 0; i--){
+        melhorCaminho[i].show(color(255, 0, 0));
+        alert("F(n) = " + (melhorCaminho[i].f - inicio.custo) + "\nG(n) = " + (melhorCaminho[i].g - inicio.custo) + "\nH(n) = " + melhorCaminho[i].h);
+    }
+    alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
     setup();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
-
-    //O bloco que será avaliado é o com menor valor f(n)
-    while(atual != meta){
+    while(atual != meta){ //O bloco que será avaliado é o com menor valor f(n)
         var menorF = 0;
         for(var i = 0; i < blocosNaoA.length; i++){
             if(blocosNaoA[i].f < blocosNaoA[menorF].f)
                 menorF = i;
         }
         var atual = blocosNaoA[menorF];
-
-        //Se o bloco atual for o objetivo (meta) encerra a execução
-        if(atual === meta){
+        if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
             noLoop();
-            var melhorCaminho = [];
-            var aux = atual;
-            while(aux.anterior){
-                melhorCaminho.push(aux.anterior);
-                aux = aux.anterior;
-            }
-            for(var i = melhorCaminho.length - 2; i >= 0; i--){
-                melhorCaminho[i].show(color(255, 0, 0));
-                alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
-            }
-            alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
+            desenharCaminho(atual, inicio);
             if(tipoBusca === 'buscar'){
                 $("#irJoia").hide();
-                $("#joia").html("Joia -> f(n) = " + atual.f);
+                $("#joia").html("Entrada até a jóia: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
                 $("#irSaida").show()
-            }
-            else{
+            }else{
                 $("#irSaida").hide();
-                $("#saida").html("Saída -> f(n) = " + atual.f);
+                $("#saida").html("Jóia até a saida: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
                 $("#irMapa").show()
             }
             return atual.f;
-        }
-        else{
+        }else{
             removeBloco(blocosNaoA, atual);
             blocosA.push(atual);
-            
             var vizinhos = atual.vizinhos;
-            //Percorre os vizinhos do bloco atual
-            for(var i = 0; i < vizinhos.length; i++){
-                //Ignora os blocos vizinhos que já foram avaliados
-                if(!blocosA.includes(vizinhos[i]) && !vizinhos[i].obstaculo){
+            for(var i = 0; i < vizinhos.length; i++){ //Percorre os vizinhos do bloco atual
+                if(!blocosA.includes(vizinhos[i]) && !vizinhos[i].obstaculo){ //Ignora os blocos vizinhos que já foram avaliados
                     var atualG = atual.g + atual.custo; //Custo do inicio (bloco atual) até seu vizinho
                     var novoCaminho = false;
-                    //Avalia os blocos vizinhos ainda não avaliados
-                    if(blocosNaoA.includes(vizinhos[i])){
+                    if(blocosNaoA.includes(vizinhos[i])){ //Avalia os blocos vizinhos ainda não avaliados
                         if(vizinhos[i].g > atualG){
                             novoCaminho = true;
                         }
-                    }
-                    else{
+                    }else{
                         novoCaminho = true;
                         blocosNaoA.push(vizinhos[i]);
                     }
-                    //Armazena o melhor caminho até o momento
-                    if(novoCaminho){
+                    if(novoCaminho){ //Salva o melhor caminho até o momento
                         vizinhos[i].g = atualG;
                         vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
                         vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
