@@ -125,7 +125,6 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
                 alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
             }
             alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
-
             if(tipoBusca === 'buscar'){
                 $("#irJoia").hide();
                 $("#joia").html("Joia -> f(n) = " + atual.f);

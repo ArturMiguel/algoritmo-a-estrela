@@ -164,7 +164,9 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                 alert("F(n) = " + melhorCaminho[i].f + "\nG(n) = " + melhorCaminho[i].g + "\nH(n) = " + melhorCaminho[i].h);
             }
             alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
-        
+            $("#custo").html("f(n) = " + atual.f);
+            personagem = mapa[atual.i][atual.j];
+            
             if(atual.nome == "Dungeon 1"){
                 var ir = confirm("Ir para " + atual.nome + "?");
                 if(ir){
@@ -180,8 +182,6 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                 //$("#irDg3").hide();
                 alert("Dungeon 3 em construção!");
             }
-            $("#custo").html("f(n) = " + atual.f);
-            personagem = mapa[atual.i][atual.j];
             return atual.f;
         }
         else{
