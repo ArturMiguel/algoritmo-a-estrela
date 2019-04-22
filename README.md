@@ -1,5 +1,5 @@
 # Algoritmo A*
-Trabalho para a discipina de Inteligência Artificial aplicando o algoritmo A* (*A star*) em um jogo de busca baseado na serie de jogos *The Legend of Zelda*.
+Trabalho para a discipina de Inteligência Artificial: Aplicando o algoritmo de busca A* (*A star*) em um jogo baseado na serie de jogos *The Legend of Zelda*.
 
 ### Linguagens 
 > HTML 5
