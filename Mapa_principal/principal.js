@@ -172,7 +172,6 @@ function busca(blocosA, blocosNaoA, inicio, meta){
             blocosA.push(atual);
             var vizinhos = atual.vizinhos;
             for(var i = 0; i < vizinhos.length; i++){ //Percorre os vizinhos do bloco atual
-                
                 if(!blocosA.includes(vizinhos[i])){ //Ignora os blocos vizinhos que já foram avaliados
                     var atualG = atual.g + atual.custo; //Custo do bloco atual até seu vizinho considerando o terreno
                     var novoCaminho = false;
@@ -185,9 +184,11 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                         blocosNaoA.push(vizinhos[i]);
                     }
                     if(novoCaminho){ //Salva o melhor caminho até o momento
-                        vizinhos[i].g = atualG;
-                        vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
-                        vizinhos[i].f = (vizinhos[i].g + vizinhos[i].h);
+                        if(atual != inicio){ //Ignora os custos do bloco inicial
+                            vizinhos[i].g = atualG;
+                            vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
+                            vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
+                        }
                         vizinhos[i].anterior = atual;
                     }
                 }
