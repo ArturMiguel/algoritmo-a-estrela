@@ -84,18 +84,18 @@ function setup(){
     mapa[14][26].show(color(0));
 }
 
-function desenharCaminho(atual, inicio){
+function desenharCaminho(atual){
     var melhorCaminho = [];
     var aux = atual;
+    melhorCaminho.push(atual);
     while(aux.anterior){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    for(var i = melhorCaminho.length - 2; i >= 0; i--){
+    for(var i = melhorCaminho.length - 1; i >= 0; i--){
+        alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
         melhorCaminho[i].show(color(255, 0, 0));
-        alert("F(n) = " + (melhorCaminho[i].f - inicio.custo) + "\nG(n) = " + (melhorCaminho[i].g - inicio.custo) + "\nH(n) = " + melhorCaminho[i].h);
     }
-    alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
@@ -111,7 +111,7 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
             noLoop();
-            desenharCaminho(atual, inicio);
+            desenharCaminho(atual);
             if(tipoBusca === 'buscar'){
                 $("#irJoia").hide();
                 $("#joia").html("Entrada até a jóia: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);

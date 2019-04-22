@@ -116,19 +116,18 @@ function entrarDungeon(bloco, id, urlPagina){
     }
 }
 
-function desenharCaminho(atual, inicio){
+function desenharCaminho(atual){
     var melhorCaminho = [];
     var aux = atual;
+    melhorCaminho.push(atual);
     while(aux.anterior){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    for(var i = melhorCaminho.length - 2; i >= 0; i--){
-        melhorCaminho[melhorCaminho.length - 1].show(color(255, 0, 0));
+    for(var i = melhorCaminho.length - 1; i >= 0; i--){
+        alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
         melhorCaminho[i].show(color(255, 0, 0));
-        alert("F(n) = " + (melhorCaminho[i].f - inicio.custo) + "\nG(n) = " + (melhorCaminho[i].g - inicio.custo) + "\nH(n) = " + melhorCaminho[i].h);
     }
-    alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
 }
 
 function removeBloco(arr, bloco){
@@ -153,11 +152,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
             noLoop(); 
-            if(!(atual.f - meta.custo < 0)){
-                atual.f = atual.f - meta.custo; //Desconsidera os custos iniciais
-                atual.g = atual.g - meta.custo;
-            }
-            desenharCaminho(atual, inicio);
+            desenharCaminho(atual);
             if(atual.local == "Dungeon 1"){
                 $("#custoDg1").html(inicio.local + " até Dungeon 1: F(n) = " + atual.f + " H(n) = " + atual.h + " F(n) = " + atual.f);
                 entrarDungeon(atual, "#irDg1", "../Dungeon_1/dungeon1.html", "Dungeon");
