@@ -127,10 +127,12 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
             alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
 
             if(tipoBusca === 'buscar'){
+                $("#irJoia").hide();
                 $("#joia").html("Joia -> f(n) = " + atual.f);
                 $("#irSaida").show()
             }
             else{
+                $("#irSaida").hide();
                 $("#saida").html("Saída -> f(n) = " + atual.f);
                 $("#irMapa").show()
             }

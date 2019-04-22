@@ -63,6 +63,7 @@ function Bloco(i, j){
     this.vizinhos = [];
     this.anterior = "";
     this.terreno = "";
+    this.nome = "";
     this.custo = 0;
 
     this.show = function(cor){
@@ -112,18 +113,27 @@ function setup(){
     dungeon1 = mapa[24][1];
     dungeon2 = mapa[39][17];
     dungeon3 = mapa[5][32];
-    dungeon1.terreno = "Dungeon 1";
-    dungeon2.terreno = "Dungeon 2";
-    dungeon3.terreno = "Dungeon 3";
+    personagem.nome = "Casa do Link";
+    dungeon1.nome = "Dungeon 1";
+    dungeon2.nome = "Dungeon 2";
+    dungeon3.nome = "Dungeon 3";
 
-    personagem.show(color(255, 0, 0));
+    //personagem.show(color(255, 0, 0));
     lostwoods.show(color(154, 154, 154));
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
     dungeon3.show(color(0, 0, 0));
 }
 
+function calculaTempo(dataI, dataF){
+    var difMs = (dataF - dataI); //Diferença em milissegundos entre data inicial e data final
+    var difMin = Math.round(((difMs % 86400000) % 3600000) / 60000); //Minutos
+    var difSec = Math.floor(difMs / 1000); //Segundos
+    $("#tempo").html("Tempo: " + difMin + " minuto(s), " + difSec + " segundo(s)");
+}
+
 function busca(blocosA, blocosNaoA, inicio, meta){
+    var dataInicial = new Date();
     setup();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
@@ -139,6 +149,9 @@ function busca(blocosA, blocosNaoA, inicio, meta){
 
         //Se o bloco atual for o objetivo (meta) encerra a execução
         if(atual === meta){
+            var dateFinal = new Date();
+            calculaTempo(dataInicial, dateFinal);
+
             noLoop();
             var melhorCaminho = [];
             var aux = atual;
@@ -152,18 +165,23 @@ function busca(blocosA, blocosNaoA, inicio, meta){
             }
             alert("F(n) = " + atual.f + "\nG(n) = " + atual.g + "\nH(n) = " + atual.h);
         
-            if(atual.terreno == "Dungeon 1"){
-                $("#dg1").html("Dungeon 1 -> f(n) = " + atual.f);
-                $("#irDg1").show();
+            if(atual.nome == "Dungeon 1"){
+                var ir = confirm("Ir para " + atual.nome + "?");
+                if(ir){
+                    $("#irDg1").hide();
+                    window.open("../Dungeon_1/dungeon1.html", "Dungeon");
+                }
             }
-            else if(atual.terreno == "Dungeon 2"){
-                $("#dg2").html("Dungeon 2 -> f(n) = " + atual.f);
-                $("#irDg2").show();
+            else if(atual.nome == "Dungeon 2"){
+                //$("#irDg2").hide();
+                alert("Dungeon 2 em construção!");
             }
-            else if(atual.terreno == "Dungeon 3"){
-                $("#dg3").html("Dungeon 3 -> f(n) = " + atual.f);
-                $("#irDg3").show();
+            else if(atual.nome == "Dungeon 3"){
+                //$("#irDg3").hide();
+                alert("Dungeon 3 em construção!");
             }
+            $("#custo").html("f(n) = " + atual.f);
+            personagem = mapa[atual.i][atual.j];
             return atual.f;
         }
         else{

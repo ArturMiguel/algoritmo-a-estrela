@@ -13,24 +13,16 @@
         <div class="container">
            <div>
                 <h1>Algoritmo A* - Mapa principal</h1>
-                <h1 id="dg1"></h1>
-                <h1 id="dg2"></h1>
-                <h1 id="dg3"></h1>
+                <h1 id="custo"></h1>
                 <h1 id="tempo"></h1>
            </div>
            <div>
-               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
-               <button id="irDg1" onclick="irDungeon('../Dungeon_1/dungeon1.html')" style="display: none">Ir para  dungeon 1</button>
+               <button id="irDg1" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
+               <button id="irDg2" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
+               <button id="irDg3" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon3, (255, 255, 255))">Buscar dungeon 3</button>
+                <!--<button onclick="setup()">Reiniciar</button>-->
+                <button onclick="location.href='principal.html'">Reiniciar</button>
            </div>
-           <div>
-               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
-               <button id="irDg2" onclick="" style="display: none">Ir para  dungeon 2</button>
-            </div>
-            <div>
-               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem,  dungeon3, (255, 255, 255))">Buscar dungeon 3</button>
-               <button id="irDg3" onclick="" style="display: none">Ir para  dungeon 3</button>
-            </div>
-            <button onclick="setup()">Reiniciar</button>
             <div id="content">
 
             </div>
@@ -40,9 +32,5 @@
         $(document).ready(function(){
             audio = window.open("../Audio/reproduzirMusica.html", "Audio", "width=700, height=600");
         })
-        
-        function irDungeon(urlDungeon){
-            dg = window.open(urlDungeon, "Dungeon", "width=1366, height=1366");
-        }
     </script>
 </head>
