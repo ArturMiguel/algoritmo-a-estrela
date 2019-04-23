@@ -45,6 +45,10 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, lostwoods, dungeon1, dungeon2, dungeon3;
 var w, h;
+let img;
+function preload(){
+    img = loadImage('link-zelda.gif');
+};
 
 function Bloco(i, j){
     this.i = i;
@@ -74,7 +78,7 @@ function Bloco(i, j){
 
 function setup(){
     background(0);
-    createCanvas(1400, 1400);
+    mapaZelda = createCanvas(2100, 2100);
     h = height / tam;
     w = width / tam;
     for(var i = 0; i < tam; i++){ //Criação do Array 2d
@@ -105,8 +109,8 @@ function setup(){
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
     dungeon3.show(color(0, 0, 0));
+    image(img, 50, 0);
 }
-
 
 function entrarDungeon(bloco, id, urlPagina){
     var ir = confirm("Entrar na " + bloco.local + "?");
