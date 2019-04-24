@@ -33,11 +33,9 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, joia;
 var w, h;
-
-let img;
-
+var img;
 function preload(){
-    img = loadImage('link-zelda.gif');
+    img = loadImage('personagem.gif');
 };
 
 function Bloco(i, j){
@@ -99,11 +97,8 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-
     cont = melhorCaminho.length - 1;
-
     personagem.show(color(255,255,255));
-
     var intervalo = setInterval(function(){
         if(cont == 0){
             clearInterval(intervalo);
@@ -111,11 +106,6 @@ function desenharCaminho(atual){
         image(img, (melhorCaminho[cont].i*2100)/tam, (melhorCaminho[cont].j*2100)/tam, 75, 75);
         cont = cont - 1;
     },200);
-    
-    //for(var i = melhorCaminho.length - 1; i >= 0; i--){
-    //    alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
-    //   melhorCaminho[i].show(color(255, 0, 0));
-    //}
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
@@ -130,7 +120,6 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
-            noLoop();
             desenharCaminho(atual);
             if(tipoBusca === 'buscar'){
                 $("#irJoia").hide();

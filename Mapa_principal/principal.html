@@ -2,7 +2,7 @@
 <head>
     <head>
         <meta charset="UTF-8">
-        <title>Algoritmo A*</title>
+        <title>MAPA PRINCIPAL</title>
         <link rel="stylesheet" href="../Dependencias/folha.css">
         <script src="../matrizrgb/lista_rgb.js"></script>
         <script src="../Dependencias/jquery-3.4.0.min.js"></script>
@@ -14,7 +14,6 @@
     <body>
         <div class="container">
            <div>
-                <h1>Algoritmo A* - Mapa principal</h1>
                 <h1 id="custoDg1"></h1>
                 <h1 id="custoDg2"></h1>
                 <h1 id="custoDg3"></h1>
@@ -22,15 +21,17 @@
                 <h1 id="tempo"></h1>
            </div>
            <div>
-               <button id="irDg1" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1, (255, 255, 255))">Buscar dungeon 1</button>
-               <button id="irDg2" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2, (255, 255, 255))">Buscar dungeon 2</button>
-               <button id="irDg3" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon3, (255, 255, 255))">Buscar dungeon 3</button>
-               <button id="irLostwoods" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, lostwoods, (255, 255, 255))">Ir para Lost Woods</button>
-                <!--<button onclick="setup()">Reiniciar</button>-->
+                <button id="irDg1" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1)">Buscar dungeon 1</button>
+                <button id="irDg2" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2)">Buscar dungeon 2</button>
+                <button id="irDg3" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon3)">Buscar dungeon 3</button>
+                <button id="irLostwoods" onclick="verificarJoias()">Ir para Lost Woods</button>
                 <button onclick="location.href='principal.html'">Reiniciar</button>
            </div>
         </div>
-        <div id="teste"> 
-        </div>
     </body>
+    <script>
+        $(document).ready(function(){
+            musicaFundo = window.open("../Audio/background.html", "Audio", "width=100, height=100");
+        })
+    </script>
 </head>

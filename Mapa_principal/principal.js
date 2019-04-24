@@ -45,11 +45,9 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, lostwoods, dungeon1, dungeon2, dungeon3;
 var w, h;
-
 var img;
-
 function preload(){
-    img = loadImage('link-zelda.gif');
+    img = loadImage("personagem.gif");
 };
 
 function Bloco(i, j){
@@ -122,8 +120,22 @@ function entrarDungeon(bloco, id, urlPagina){
     }
 }
 
+function mostrarCusto(inicio, atual){
+    if(atual.local == "Dungeon 1"){
+        $("#custoDg1").html(inicio.local + " até Dungeon 1: F(n) = " + atual.f + " H(n) = " + atual.h + " F(n) = " + atual.f);
+        entrarDungeon(atual, "#irDg1", "../Dungeon_1/dungeon1.html", "Dungeon");
+    }else if(atual.local == "Dungeon 2"){
+        $("#custoDg2").html(inicio.local + " até Dungeon 2: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+        //entrarDungeon(atual, "#irDg2", "../Dungeon_2/dungeon2.html", "Dungeon"); //Dungeon 2 ainda não existe
+    }else if(atual.local == "Dungeon 3"){
+        $("#custoDg3").html(inicio.local + " até Dungeon 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+        //entrarDungeon(atual, "#irDg3", "../Dungeon_3/dungeon3.html", "Dungeon"); //Dungeon 3 ainda não existe
+    }else if(atual.local == "Lostwoods"){
+        $("#custoLostwoods").html(inicio.local + " até Lostwoods 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+    }
+}
+
 function desenharCaminho(atual){
-    
     var melhorCaminho = [];
     var aux = atual;
     melhorCaminho.push(atual);
@@ -131,31 +143,17 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-
     var cont = melhorCaminho.length - 1;
-
     personagem.show(color(146, 208, 80));
-
     var intervalo = setInterval(function(){
         if(cont == 0){
             clearInterval(intervalo);
+            mostrarCusto(melhorCaminho[melhorCaminho.length - 1], melhorCaminho[0]);
         }
         image(img, (melhorCaminho[cont].i*2100)/(42), (melhorCaminho[cont].j*2100)/(42), 50, 50);
-        //melhorCaminho[cont].show(color(255, 0, 0));
         cont = cont - 1;
-    },200);
-
-    
-    
-    //for(var i = melhorCaminho.length - 1; i >= 0; i--){
-    //    image(img, (melhorCaminho[i].i*2100)/(42)+5, (melhorCaminho[i].j*2100)/(42)+5)
-    //    alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
-    //    melhorCaminho[i].show(color(255, 0, 0));
-    //}
-    
+    },200); 
 };
-
-
 
 function removeBloco(arr, bloco){
     for(var i = arr.length - 1; i >= 0; i--){
@@ -178,21 +176,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
-            noLoop(); 
             desenharCaminho(atual);
-            if(atual.local == "Dungeon 1"){
-                $("#custoDg1").html(inicio.local + " até Dungeon 1: F(n) = " + atual.f + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                entrarDungeon(atual, "#irDg1", "../Dungeon_1/dungeon1.html", "Dungeon");
-            }else if(atual.local == "Dungeon 2"){
-                $("#custoDg2").html(inicio.local + " até Dungeon 2: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                //entrarDungeon(atual, "#irDg2", "../Dungeon_2/dungeon2.html", "Dungeon"); //Dungeon 2 ainda não existe
-            }else if(atual.local == "Dungeon 3"){
-                $("#custoDg3").html(inicio.local + " até Dungeon 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                //entrarDungeon(atual, "#irDg3", "../Dungeon_3/dungeon3.html", "Dungeon"); //Dungeon 3 ainda não existe
-            }else if(atual.local == "Lostwoods"){ //Precisa fazer alguma função para ficar disponível apenas quando as 3 joias forem recuperadas
-                $("#custoLostwoods").html(inicio.local + " até Lostwoods 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                window.open("../Audio/reproduzirMusica.html", "Audio", "width=700, height=600");
-            }
             personagem = mapa[atual.i][atual.j];
         }else{
             removeBloco(blocosNaoA, atual);
@@ -222,4 +206,8 @@ function busca(blocosA, blocosNaoA, inicio, meta){
             }
         }
     }
+}
+
+function verificarJoias(){
+    alert("Tem que fazer essa função ainda hehe");
 }
