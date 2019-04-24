@@ -33,6 +33,13 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, joia;
 var w, h;
+
+let img;
+
+function preload(){
+    img = loadImage('link-zelda.gif');
+};
+
 function Bloco(i, j){
     this.i = i;
     this.j = j;
@@ -61,7 +68,7 @@ function Bloco(i, j){
 
 function setup(){
     background(0);
-    createCanvas(1400, 1400);
+    createCanvas(2100, 2100);
     h = height / tam;
     w = width / tam;
     for(var i = 0; i < tam; i++){ //Criação do Array 2d
@@ -81,7 +88,7 @@ function setup(){
     personagem = mapa[14][26];
     joia = mapa[13][3];
     joia.show(color(255, 255, 0));
-    mapa[14][26].show(color(0));
+    image(img, (personagem.i*2100)/tam, (personagem.j*2100)/tam, 75, 75);
 }
 
 function desenharCaminho(atual){
@@ -92,10 +99,23 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    for(var i = melhorCaminho.length - 1; i >= 0; i--){
-        alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
-        melhorCaminho[i].show(color(255, 0, 0));
-    }
+
+    cont = melhorCaminho.length - 1;
+
+    personagem.show(color(255,255,255));
+
+    var intervalo = setInterval(function(){
+        if(cont == 0){
+            clearInterval(intervalo);
+        }
+        image(img, (melhorCaminho[cont].i*2100)/tam, (melhorCaminho[cont].j*2100)/tam, 75, 75);
+        cont = cont - 1;
+    },200);
+    
+    //for(var i = melhorCaminho.length - 1; i >= 0; i--){
+    //    alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
+    //   melhorCaminho[i].show(color(255, 0, 0));
+    //}
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){

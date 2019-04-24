@@ -45,7 +45,9 @@ var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 var personagem, lostwoods, dungeon1, dungeon2, dungeon3;
 var w, h;
-let img;
+
+var img;
+
 function preload(){
     img = loadImage('link-zelda.gif');
 };
@@ -109,7 +111,7 @@ function setup(){
     dungeon1.show(color(0, 0, 0));
     dungeon2.show(color(0, 0, 0));
     dungeon3.show(color(0, 0, 0));
-    image(img, 50, 0);
+    image(img, (personagem.i*2100)/tam, (personagem.j*2100)/tam, 50, 50);
 }
 
 function entrarDungeon(bloco, id, urlPagina){
@@ -121,6 +123,7 @@ function entrarDungeon(bloco, id, urlPagina){
 }
 
 function desenharCaminho(atual){
+    
     var melhorCaminho = [];
     var aux = atual;
     melhorCaminho.push(atual);
@@ -128,11 +131,31 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    for(var i = melhorCaminho.length - 1; i >= 0; i--){
-        alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
-        melhorCaminho[i].show(color(255, 0, 0));
-    }
-}
+
+    var cont = melhorCaminho.length - 1;
+
+    personagem.show(color(146, 208, 80));
+
+    var intervalo = setInterval(function(){
+        if(cont == 0){
+            clearInterval(intervalo);
+        }
+        image(img, (melhorCaminho[cont].i*2100)/(42), (melhorCaminho[cont].j*2100)/(42), 50, 50);
+        //melhorCaminho[cont].show(color(255, 0, 0));
+        cont = cont - 1;
+    },200);
+
+    
+    
+    //for(var i = melhorCaminho.length - 1; i >= 0; i--){
+    //    image(img, (melhorCaminho[i].i*2100)/(42)+5, (melhorCaminho[i].j*2100)/(42)+5)
+    //    alert("F(n): " + melhorCaminho[i].f + "\nG(n): " + melhorCaminho[i].g + "\nH(n): " + melhorCaminho[i].h);
+    //    melhorCaminho[i].show(color(255, 0, 0));
+    //}
+    
+};
+
+
 
 function removeBloco(arr, bloco){
     for(var i = arr.length - 1; i >= 0; i--){
