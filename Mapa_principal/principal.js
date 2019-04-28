@@ -112,26 +112,18 @@ function setup(){
     image(img, (personagem.i*2100)/tam, (personagem.j*2100)/tam, 50, 50);
 }
 
-function entrarDungeon(bloco, id, urlPagina){
-    var ir = confirm("Entrar na " + bloco.local + "?");
+function entrarDungeon(atual){
+    var ir = confirm("Entrar na " + atual.local + "?");
     if(ir){
-        $(id).hide();
-        window.open(urlPagina);
-    }
-}
-
-function mostrarCusto(inicio, atual){
-    if(atual.local == "Dungeon 1"){
-        $("#custoDg1").html(inicio.local + " até Dungeon 1: F(n) = " + atual.f + " H(n) = " + atual.h + " F(n) = " + atual.f);
-        entrarDungeon(atual, "#irDg1", "../Dungeon_1/dungeon1.html", "Dungeon");
-    }else if(atual.local == "Dungeon 2"){
-        $("#custoDg2").html(inicio.local + " até Dungeon 2: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-        //entrarDungeon(atual, "#irDg2", "../Dungeon_2/dungeon2.html", "Dungeon"); //Dungeon 2 ainda não existe
-    }else if(atual.local == "Dungeon 3"){
-        $("#custoDg3").html(inicio.local + " até Dungeon 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-        //entrarDungeon(atual, "#irDg3", "../Dungeon_3/dungeon3.html", "Dungeon"); //Dungeon 3 ainda não existe
-    }else if(atual.local == "Lostwoods"){
-        $("#custoLostwoods").html(inicio.local + " até Lostwoods 3: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
+        if(atual.local == "Dungeon 1"){
+            $("#irDg1").hide();
+           // window.location = "../Dungeon_1/dungeon1.html";
+        }else if(atual.local == "Dungeon 2"){
+            $("#irDg2").hide();
+        }else if(atual.local == "Dungeon 3"){
+            $("#irDg3").hide();
+            //location.href = "../Dungeon_3/dungeon3.html";
+        }
     }
 }
 
@@ -148,11 +140,11 @@ function desenharCaminho(atual){
     var intervalo = setInterval(function(){
         if(cont == 0){
             clearInterval(intervalo);
-            mostrarCusto(melhorCaminho[melhorCaminho.length - 1], melhorCaminho[0]);
+            entrarDungeon(atual);
         }
         image(img, (melhorCaminho[cont].i*2100)/(42), (melhorCaminho[cont].j*2100)/(42), 50, 50);
         cont = cont - 1;
-    },200); 
+    }, 10); 
 };
 
 function removeBloco(arr, bloco){
@@ -208,6 +200,11 @@ function busca(blocosA, blocosNaoA, inicio, meta){
     }
 }
 
+//Gambiarra temporária
 function verificarJoias(){
-    alert("Tem que fazer essa função ainda hehe");
+    if($("#irDg1").is(":hidden") && $("#irDg2").is(":hidden") && $("#irDg3").is(":hidden")){
+        busca(blocosAvaliados, blocosNaoAvaliados, personagem, lostwoods);
+    }else{
+        alert("Necessário todas as jóias para is até Lost Woods!");
+    }
 }

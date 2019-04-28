@@ -105,10 +105,10 @@ function desenharCaminho(atual){
         }
         image(img, (melhorCaminho[cont].i*2100)/tam, (melhorCaminho[cont].j*2100)/tam, 75, 75);
         cont = cont - 1;
-    },200);
+    }, 10);
 }
 
-function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
+function busca(blocosA, blocosNaoA, inicio, meta){
     setup();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
@@ -121,16 +121,6 @@ function busca(blocosA, blocosNaoA, inicio, meta, tipoBusca){
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
             desenharCaminho(atual);
-            if(tipoBusca === 'buscar'){
-                $("#irJoia").hide();
-                $("#joia").html("Entrada até a jóia: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                $("#irSaida").show()
-            }else{
-                $("#irSaida").hide();
-                $("#saida").html("Jóia até a saida: G(n) = " + atual.g + " H(n) = " + atual.h + " F(n) = " + atual.f);
-                $("#irMapa").show()
-            }
-            return atual.f;
         }else{
             removeBloco(blocosNaoA, atual);
             blocosA.push(atual);

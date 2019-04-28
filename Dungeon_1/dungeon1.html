@@ -12,14 +12,9 @@
     <body>
         <div class="container">
            <div>
-                <h1 id="joia"></h1>
-                <h1 id="saida"></h1>
-                <h1 id="tempo"></h1>
-           </div>
-           <div>
-               <button id="irJoia" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, joia, 'buscar')">Buscar joia</button>
-               <button id="irSaida" style="display: none" onclick="busca(blocosAvaliados, blocosNaoAvaliados, joia, personagem, 'sair')">Buscar saida</button>
-               <button id="irMapa" style="display: none" onclick="window.close()">Sair da dungeon</button>
+               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, joia)">Buscar joia</button>
+               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, joia, personagem)">Buscar saida</button>
+               <button onclick="window.history.back()">Sair da dungeon</button>
            </div>
         </div>
     </body>
