@@ -3,19 +3,21 @@
     <head>
         <meta charset="UTF-8">
         <title>DUNGEON 1</title>
-        <link rel="stylesheet" href="../Dependencias/folha.css">
+        <link rel="stylesheet" href="../Dependencias/bootstrap-4.3.1-dist/css/bootstrap.min.css">
         <script src="../matrizrgb/lista_rgb.js"></script>
         <script src="../Dependencias/jquery-3.4.0.min.js"></script>
         <script src="../Dependencias/p5.min.js"></script>
         <script src="dungeon1.js"></script>
     </head>
     <body>
-        <div class="container">
-           <div>
-               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, joia)">Buscar joia</button>
-               <button onclick="busca(blocosAvaliados, blocosNaoAvaliados, joia, personagem)">Buscar saida</button>
-               <button onclick="window.history.back()">Sair da dungeon</button>
-           </div>
+        <fieldset>
+            <legend>Dungeon 1</legend>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, pingente)">Buscar pingente</button>
+                <button class="btn btn-info" onclick="busca(blocosAvaliados, blocosNaoAvaliados, pingente, personagem)">Buscar saida</button>
+                <button class="btn btn-success" onclick="window.history.back()">Sair da dungeon</button>
+            </div>
+        </fieldset>
         </div>
     </body>
 </head>

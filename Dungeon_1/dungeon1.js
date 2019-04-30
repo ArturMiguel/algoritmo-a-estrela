@@ -31,11 +31,12 @@ var tam = 28;
 var mapa = new Array(tam);
 var blocosAvaliados = []; //Conjunto de nós avaliados
 var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
-var personagem, joia;
+var personagem, pingente;
 var w, h;
-var img;
 function preload(){
-    img = loadImage('personagem.gif');
+    imgLink = loadImage("personagem.gif");
+    imgPingente = loadImage("pingente.png");
+    imgDungeon = loadImage("dungeon.png");
 };
 
 function Bloco(i, j){
@@ -50,7 +51,7 @@ function Bloco(i, j){
     this.custo = 0;
     this.obstaculo = false;
     this.show = function(cor){
-        stroke(100);
+        stroke(100)
         fill(cor);
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
@@ -66,7 +67,7 @@ function Bloco(i, j){
 
 function setup(){
     background(0);
-    createCanvas(2100, 2100);
+    createCanvas(800, 800);
     h = height / tam;
     w = width / tam;
     for(var i = 0; i < tam; i++){ //Criação do Array 2d
@@ -84,9 +85,11 @@ function setup(){
     }
     coloreMapa(mapa, tam, lista_rgb_dg1);
     personagem = mapa[14][26];
-    joia = mapa[13][3];
-    joia.show(color(255, 255, 0));
-    image(img, (personagem.i*2100)/tam, (personagem.j*2100)/tam, 75, 75);
+    pingente = mapa[13][3];
+    dungeon = mapa[14][27];
+    image(imgLink, (personagem.i * 800) / tam, (personagem.j * 800) / tam, 28, 28);
+    image(imgPingente, (pingente.i * 800) / tam, (pingente.j * 800) / tam, 28, 28);
+    image(imgDungeon, (dungeon.i * 800) / tam, (dungeon.j * 800) / tam, 28, 28);
 }
 
 function desenharCaminho(atual){
@@ -103,7 +106,7 @@ function desenharCaminho(atual){
         if(cont == 0){
             clearInterval(intervalo);
         }
-        image(img, (melhorCaminho[cont].i*2100)/tam, (melhorCaminho[cont].j*2100)/tam, 75, 75);
+        image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800)/tam, 28, 28);
         cont = cont - 1;
     }, 10);
 }

@@ -3,29 +3,28 @@
     <head>
         <meta charset="UTF-8">
         <title>MAPA PRINCIPAL</title>
-        <link rel="stylesheet" href="../Dependencias/folha.css">
+        <link rel="stylesheet" href="../Dependencias/bootstrap-4.3.1-dist/css/bootstrap.min.css">
         <script src="../matrizrgb/lista_rgb.js"></script>
         <script src="../Dependencias/jquery-3.4.0.min.js"></script>
         <script src="../Dependencias/p5.min.js"></script>
         <script src="../Dependencias/p5.dom.js"></script>
         <script src="../Dependencias/p5.gif.min.js"></script>
-        <script src="FileRead.js"></script>
         <script src="principal.js"></script>
     </head>
     <body>
-        <div class="container">
-           <div>
-                <button id="irDg1" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1)">Buscar dungeon 1</button>
-                <button id="irDg2" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2)">Buscar dungeon 2</button>
-                <button id="irDg3" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon3)">Buscar dungeon 3</button>
-                <button id="irLostwoods" onclick="verificarJoias()">Ir para Lost Woods</button>
-                <button onclick="location.href='principal.html'">Reiniciar</button>
-           </div>
-        </div>
+        <fieldset>
+            <legend>Algoritmo A* - The Legend of Zelda</legend>
+            <div class="form-group">
+                <button class="btn btn-secondary" id="irDg1" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon1)">Buscar dungeon 1</button>
+                <button class="btn btn-secondary" id="irDg2" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon2)">Buscar dungeon 2</button>
+                <button class="btn btn-secondary" id="irDg3" onclick="busca(blocosAvaliados, blocosNaoAvaliados, personagem, dungeon3)">Buscar dungeon 3</button>
+                <button class="btn btn-info" id="irLostwoods" onclick="verificarPingentes()">Ir para Lost Woods</button>
+            </div>
+        </fieldset>
     </body>
     <script>
         $(document).ready(function(){
-            musicaFundo = window.open("../Audio/background.html", "Audio", "width=100, height=100");
+          musicaFundo = window.open("../Audio/background.html", "Audio", "width=100, height=100");
         })
     </script>
 </head>
