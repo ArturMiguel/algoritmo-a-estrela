@@ -169,7 +169,7 @@ function desenharCaminho(atual){
             cont = cont - 1;
             contPassos = contPassos + 1;
         }
-    }, 1000);
+    }, 10);
 };
 
 function removeBloco(arr, bloco){

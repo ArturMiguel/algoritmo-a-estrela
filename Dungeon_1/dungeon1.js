@@ -34,7 +34,6 @@ var w, h;
 function preload(){
     imgLink = loadImage("personagem.gif");
     imgPingente = loadImage("pingente.png");
-    imgDungeon = loadImage("dungeon.png");
 };
 
 function Bloco(i, j){
@@ -85,12 +84,11 @@ function setup(){
     coloreMapa(mapa, tam, lista_rgb_dg1);
     personagem = mapa[14][26];
     pingente = mapa[13][3];
-    dungeon = mapa[14][27];
-    dungeon.local = "Entrada";
+    entrada = mapa[14][26];
+    entrada.local = "Entrada";
     pingente.local = "Pingente";
     image(imgLink, (personagem.i * 800) / tam, (personagem.j * 800) / tam, 28, 28);
     image(imgPingente, (pingente.i * 800) / tam, (pingente.j * 800) / tam, 28, 28);
-    image(imgDungeon, (dungeon.i * 800) / tam, (dungeon.j * 800) / tam, 28, 28);
 }
 
 function desenharCaminho(atual){
