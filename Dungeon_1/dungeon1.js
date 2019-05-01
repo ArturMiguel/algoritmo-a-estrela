@@ -49,6 +49,7 @@ function Bloco(i, j){
     this.anterior = "";
     this.terreno = "";
     this.custo = 0;
+    this.local = "";
     this.obstaculo = false;
     this.show = function(cor){
         stroke(100)
@@ -86,7 +87,9 @@ function setup(){
     coloreMapa(mapa, tam, lista_rgb_dg1);
     personagem = mapa[14][26];
     pingente = mapa[13][3];
-    dungeon = mapa[14][27];
+    dungeon = mapa[14][26];
+    dungeon.local = "Entrada";
+    pingente.local = "Pingente";
     image(imgLink, (personagem.i * 800) / tam, (personagem.j * 800) / tam, 28, 28);
     image(imgPingente, (pingente.i * 800) / tam, (pingente.j * 800) / tam, 28, 28);
     image(imgDungeon, (dungeon.i * 800) / tam, (dungeon.j * 800) / tam, 28, 28);
@@ -123,6 +126,13 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
+            if(meta.local == "Pingente"){
+                $("#irPingente").hide();
+                $("#irEntrada").show();
+            }else if(meta.local == "Entrada"){
+                $("#irEntrada").hide();
+                $("#irMapa").show();
+            }
             desenharCaminho(atual);
         }else{
             removeBloco(blocosNaoA, atual);

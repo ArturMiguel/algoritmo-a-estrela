@@ -152,15 +152,24 @@ function desenharCaminho(atual){
         aux = aux.anterior;
     }
     var cont = melhorCaminho.length - 1;
+    var cont_aux = 0;
     personagem.show(color(146, 208, 80));
     var intervalo = setInterval(function(){
+        image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
+        if(melhorCaminho[cont - 1]){
+            $("#listagem").html("<tr><th>" + cont_aux + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
+        }
+        if(melhorCaminho[cont + 1]){
+            melhorCaminho[cont + 1].show(color(255, 255,  0));
+        }
         if(cont == 0){
             clearInterval(intervalo);
             tipoDestino(atual);
+        }else{
+            cont = cont - 1;
+            cont_aux = cont_aux + 1;
         }
-        image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
-        cont = cont - 1;
-    }, 10); 
+    }, 1000);
 };
 
 function removeBloco(arr, bloco){

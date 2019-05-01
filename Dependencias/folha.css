@@ -7,8 +7,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}*/
-
+}
 button{
   font-size: 30px;
+}
+*/
+
+body{
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+}
+
+.space{
+  margin-right: 50px !important;
 }
