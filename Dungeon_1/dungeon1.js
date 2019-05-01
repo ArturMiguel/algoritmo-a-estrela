@@ -8,11 +8,9 @@ function coloreMapa(mapa, tamanho, lista_rgb){
             minima = Math.min.apply(null, lista_distancia_cor);
             if(minima == parseInt(parte_escura)){
                 mapa[i][j].show(color(160, 160, 160));
-                mapa[i][j].terreno = "Escuridao";
                 mapa[i][j].obstaculo = true;
             }else{
                 mapa[i][j].show(color(255, 255, 255));
-                mapa[i][j].terreno = "Luz";
                 mapa[i][j].custo = 10;
             }
         }
@@ -87,7 +85,7 @@ function setup(){
     coloreMapa(mapa, tam, lista_rgb_dg1);
     personagem = mapa[14][26];
     pingente = mapa[13][3];
-    dungeon = mapa[14][26];
+    dungeon = mapa[14][27];
     dungeon.local = "Entrada";
     pingente.local = "Pingente";
     image(imgLink, (personagem.i * 800) / tam, (personagem.j * 800) / tam, 28, 28);
@@ -103,15 +101,24 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    cont = melhorCaminho.length - 1;
-    personagem.show(color(255,255,255));
+    var cont = melhorCaminho.length - 1;
+    var contPassos = 0;
+    personagem.show(color(255, 255, 255));
     var intervalo = setInterval(function(){
+        image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800) / tam, 28, 28);
+        if(melhorCaminho[cont - 1]){
+            $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
+        }
+        if(melhorCaminho[cont + 1]){
+            melhorCaminho[cont + 1].show(color(255, 255, 0));
+        }
         if(cont == 0){
             clearInterval(intervalo);
+        }else{
+            cont = cont - 1;
+            contPassos = contPassos + 1;
         }
-        image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800)/tam, 28, 28);
-        cont = cont - 1;
-    }, 10);
+    }, 100);
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta){
