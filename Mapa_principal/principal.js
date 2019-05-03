@@ -106,6 +106,7 @@ function setup(){
     dungeon1 = mapa[24][1];
     dungeon2 = mapa[39][17];
     dungeon3 = mapa[5][32];
+    personagem.local = "Casa do Link";
     lostwoods.local = "Lost Woods";
     espada.local = "Espada";
     dungeon1.local = "Dungeon 1";
@@ -121,24 +122,30 @@ function setup(){
 }
 
 function tipoDestino(atual){
-    var ir = confirm("Confirmar " + atual.local + "?");
-    if(ir){
-        if(atual.local == "Dungeon 1"){
-            $("#irDg1").hide();
-            qtdPingentes = qtdPingentes + 1;
-            window.location = "../Dungeon_1/dungeon1.html";
-        }else if(atual.local == "Dungeon 2"){
-            qtdPingentes = qtdPingentes + 1;
-           // window.location = "../Dungeon_2/dungeon2.html";
-           $("#irDg2").hide();
-        }else if(atual.local == "Dungeon 3"){
-            qtdPingentes = qtdPingentes + 1;
-           // location.href = "../Dungeon_3/dungeon3.html";
-           $("#irDg3").hide();
-        }else if(atual.local == "Lost Woods"){
-            busca(blocosAvaliados, blocosNaoAvaliados, lostwoods, espada);
-        }else if(atual.local == "Espada"){
-            alert("Fim de jogo");
+    if(atual.local == "Lost Woods"){
+        alert("Você chegou na entrada de Lost Woods. Indo para a espada!!");
+        busca(blocosAvaliados, blocosNaoAvaliados, lostwoods, espada);
+    }else if(atual.local == "Espada"){
+        alert("Fim de jogo");
+        $("#irLostwoods").hide();
+        $("#reiniciar").show();
+    }
+    else{
+        var ir = confirm("Confirmar " + atual.local + "?");
+        if(ir){
+            if(atual.local == "Dungeon 1"){
+                $("#irDg1").hide();
+                qtdPingentes = qtdPingentes + 1;
+                window.location = "../Dungeon_1/dungeon1.html";
+            }else if(atual.local == "Dungeon 2"){
+                qtdPingentes = qtdPingentes + 1;
+                window.location = "../Dungeon_2/dungeon2.html";
+            $("#irDg2").hide();
+            }else if(atual.local == "Dungeon 3"){
+                qtdPingentes = qtdPingentes + 1;
+                location.href = "../Dungeon_3/dungeon3.html";
+            $("#irDg3").hide();
+            }
         }
     }
 }
@@ -154,6 +161,7 @@ function desenharCaminho(atual){
     var cont = melhorCaminho.length - 1;
     var contPassos = 0;
     personagem.show(color(146, 208, 80));
+    $("#caminho").html("Saindo de " + melhorCaminho[melhorCaminho.length - 1].local + " até " + melhorCaminho[0].local);
     var intervalo = setInterval(function(){
         image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
         if(melhorCaminho[cont - 1]){
@@ -169,7 +177,7 @@ function desenharCaminho(atual){
             cont = cont - 1;
             contPassos = contPassos + 1;
         }
-    }, 10);
+    }, 200);
 };
 
 function removeBloco(arr, bloco){

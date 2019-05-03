@@ -81,10 +81,10 @@ function setup(){
             mapa[i][j].addVizinhos(mapa);
         }
     }
-    coloreMapa(mapa, tam, lista_rgb_dg1);
-    personagem = mapa[14][26];
-    pingente = mapa[13][3];
-    entrada = mapa[14][26];
+    coloreMapa(mapa, tam, lista_rgb_dg2);
+    personagem = mapa[13][25];
+    pingente = mapa[13][2];
+    entrada = mapa[13][25];
     entrada.local = "Entrada";
     pingente.local = "Pingente";
     image(imgLink, (personagem.i * 800) / tam, (personagem.j * 800) / tam, 28, 28);

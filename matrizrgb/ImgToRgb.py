@@ -1,6 +1,6 @@
 #essa parte converte em rgb
 import imageio
-rgb_list = imageio.imread('dg1.png')
+rgb_list = imageio.imread('dg3.png')
 #variavel rgb_list é uma matriz do tipo imageio
 
 #essa parte é gambiarra para jogar no javascript
