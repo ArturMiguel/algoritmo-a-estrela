@@ -1,6 +1,6 @@
 function coloreMapa(mapa, tamanho, lista_rgb){
-    for(var i = 0; i < tamanho; i++){
-        for(var j = 0; j < tamanho; j++){
+    for(let i = 0; i < tamanho; i++){
+        for(let j = 0; j < tamanho; j++){
             lista_distancia_cor = []
             d_grama = Math.sqrt(pow((lista_rgb[j][i][0] - 146), 2) + pow((lista_rgb[j][i][1] - 208),2) +
             pow((lista_rgb[j][i][2] - 80), 2));
@@ -23,7 +23,7 @@ function coloreMapa(mapa, tamanho, lista_rgb){
                 mapa[i][j].terreno = "Areia";
                 mapa[i][j].custo = 20;
             }else if(minima == parseInt(d_floresta)){
-                mapa[i][j].show(color(35, 142, 35));
+                mapa[i][j].show(color(0, 140, 0));
                 mapa[i][j].terreno = "Floresta";
                 mapa[i][j].custo = 100;
             }else if(minima == parseInt(d_montanha)){
@@ -39,12 +39,11 @@ function coloreMapa(mapa, tamanho, lista_rgb){
     }
 }
 
-var tam = 42;
-var mapa = new Array(tam);
-var blocosAvaliados = []; //Conjunto de nós avaliados
-var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
-var personagem, espada, lostwoods, dungeon1, dungeon2, dungeon3, qtdPingentes = 0;
-var w, h;
+tam = 42;
+mapa = new Array(tam);
+blocosAvaliados = []; //Conjunto de nós avaliados
+blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
+qtdPingentes = 0;
 
 function preload(){
     imgLink = loadImage("personagem.gif");
@@ -68,7 +67,7 @@ function Bloco(i, j){
     this.local = "";
     this.show = function(cor){
         //stroke(cor.levels['0'], cor.levels['1'], cor.levels['2']);
-        stroke(100);
+        stroke(130);
         fill(cor);
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
@@ -86,22 +85,22 @@ function setup(){
     mapaZelda = createCanvas(800, 800);
     h = height / tam;
     w = width / tam;
-    for(var i = 0; i < tam; i++){ //Criação do Array 2d
+    for(let i = 0; i < tam; i++){ //Criação do Array 2d
         mapa[i] = new Array(tam);
     }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
+    for(let i = 0; i < tam; i++){
+        for(let j = 0; j < tam; j++){
             mapa[i][j] = new Bloco(i, j);
         }
     }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
+    for(let i = 0; i < tam; i++){
+        for(let j = 0; j < tam; j++){
             mapa[i][j].addVizinhos(mapa);
         }
     }
     coloreMapa(mapa, tam, lista_rgb_principal);
     personagem = mapa[24][27];
-    lostwoods = mapa[6][6];
+    lostwoods = mapa[6][5];
     espada = mapa[2][1];
     dungeon1 = mapa[24][1];
     dungeon2 = mapa[39][17];
@@ -181,7 +180,7 @@ function desenharCaminho(atual){
 };
 
 function removeBloco(arr, bloco){
-    for(var i = arr.length - 1; i >= 0; i--){
+    for(let i = arr.length - 1; i >= 0; i--){
         if(arr[i] == bloco){
             arr.splice(i, 1);
         }
@@ -195,7 +194,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
     
     while(atual != meta){
         var menorF = 0; //O bloco que será avaliado é o com menor valor f(n)
-        for(var i = 0; i < blocosNaoA.length; i++){
+        for(let i = 0; i < blocosNaoA.length; i++){
             if(blocosNaoA[i].f < blocosNaoA[menorF].f)
                 menorF = i;
         }
@@ -207,7 +206,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
             removeBloco(blocosNaoA, atual);
             blocosA.push(atual);
             var vizinhos = atual.vizinhos;
-            for(var i = 0; i < vizinhos.length; i++){ //Percorre os vizinhos do bloco atual
+            for(let i = 0; i < vizinhos.length; i++){ //Percorre os vizinhos do bloco atual
                 if(!blocosA.includes(vizinhos[i])){ //Ignora os blocos vizinhos que já foram avaliados
                     var atualG = atual.g + atual.custo; //Custo do bloco atual até seu vizinho considerando o terreno
                     var novoCaminho = false;
