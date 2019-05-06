@@ -1,6 +1,6 @@
 function coloreMapa(mapa, tamanho, lista_rgb){
-    for(var i = 0; i < tamanho; i++){
-        for(var j = 0; j < tamanho; j++){
+    for(let i = 0; i < tamanho; i++){
+        for(let j = 0; j < tamanho; j++){
             lista_distancia_cor = []
             parte_escura = Math.sqrt(pow((lista_rgb[j][i][0] - 160), 2) + pow((lista_rgb[j][i][1] - 160),2) + pow((lista_rgb[j][i][2] - 160), 2));
             parte_clara = Math.sqrt(pow((lista_rgb[j][i][0] - 207), 2) + pow((lista_rgb[j][i][1] - 207), 2) + pow((lista_rgb[j][i][2] - 207), 2));
@@ -18,19 +18,18 @@ function coloreMapa(mapa, tamanho, lista_rgb){
 }
 
 function removeBloco(arr, bloco){
-    for(var i = arr.length - 1; i >= 0; i--){
+    for(let i = arr.length - 1; i >= 0; i--){
         if(arr[i] == bloco){
             arr.splice(i, 1);
         }
     }
 }
 
-var tam = 28;
-var mapa = new Array(tam);
-var blocosAvaliados = []; //Conjunto de nós avaliados
-var blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
-var personagem, pingente;
-var w, h;
+tam = 28;
+mapa = new Array(tam);
+blocosAvaliados = []; //Conjunto de nós avaliados
+blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
+
 function preload(){
     imgLink = loadImage("personagem.gif");
     imgPingente = loadImage("pingente.png");
@@ -54,8 +53,8 @@ function Bloco(i, j){
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
     this.addVizinhos = function(mapa){
-        var i = this.i;
-        var j = this.j;
+        let i = this.i;
+        let j = this.j;
         if(mapa[i - 1] && mapa[i - 1][j]) this.vizinhos.push(mapa[i - 1][j]); //Esquerda
         if(mapa[i + 1] && mapa[i + 1][j]) this.vizinhos.push(mapa[i + 1][j]); //Direita
         if(mapa[i][j + 1]) this.vizinhos.push(mapa[i][j + 1]); //Cima
@@ -68,16 +67,16 @@ function setup(){
     createCanvas(800, 800);
     h = height / tam;
     w = width / tam;
-    for(var i = 0; i < tam; i++){ //Criação do Array 2d
+    for(let i = 0; i < tam; i++){ //Criação do Array 2d
         mapa[i] = new Array(tam);
     }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
+    for(let i = 0; i < tam; i++){
+        for(let j = 0; j < tam; j++){
             mapa[i][j] = new Bloco(i, j);
         }
     }
-    for(var i = 0; i < tam; i++){
-        for(var j = 0; j < tam; j++){
+    for(let i = 0; i < tam; i++){
+        for(let j = 0; j < tam; j++){
             mapa[i][j].addVizinhos(mapa);
         }
     }
@@ -92,17 +91,17 @@ function setup(){
 }
 
 function desenharCaminho(atual){
-    var melhorCaminho = [];
-    var aux = atual;
+    let melhorCaminho = [];
+    let aux = atual;
     melhorCaminho.push(atual);
     while(aux.anterior){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    var cont = melhorCaminho.length - 1;
-    var contPassos = 0;
+    let cont = melhorCaminho.length - 1;
+    let contPassos = 0;
     personagem.show(color(255, 255, 255));
-    var intervalo = setInterval(function(){
+    let intervalo = setInterval(function(){
         image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800) / tam, 28, 28);
         if(melhorCaminho[cont - 1]){
             $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
@@ -125,7 +124,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
     blocosNaoA.push(inicio);
     while(atual != meta){ //O bloco que será avaliado é o com menor valor f(n)
         var menorF = 0;
-        for(var i = 0; i < blocosNaoA.length; i++){
+        for(let i = 0; i < blocosNaoA.length; i++){
             if(blocosNaoA[i].f < blocosNaoA[menorF].f)
                 menorF = i;
         }

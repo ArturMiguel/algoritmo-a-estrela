@@ -72,8 +72,8 @@ function Bloco(i, j){
         rect(this.i * h, this.j * w, h - 1, w - 1);
     }
     this.addVizinhos = function(mapa){
-        var i = this.i;
-        var j = this.j;
+        let i = this.i;
+        let j = this.j;
         if(mapa[i - 1] && mapa[i - 1][j]) this.vizinhos.push(mapa[i - 1][j]); //Esquerda
         if(mapa[i + 1] && mapa[i + 1][j]) this.vizinhos.push(mapa[i + 1][j]); //Direita
         if(mapa[i][j + 1]) this.vizinhos.push(mapa[i][j + 1]); //Cima
@@ -150,18 +150,18 @@ function tipoDestino(atual){
 }
 
 function desenharCaminho(atual){
-    var melhorCaminho = [];
-    var aux = atual;
+    let melhorCaminho = [];
+    let aux = atual;
     melhorCaminho.push(atual);
     while(aux.anterior){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    var cont = melhorCaminho.length - 1;
-    var contPassos = 0;
+    let cont = melhorCaminho.length - 1;
+    let contPassos = 0;
     personagem.show(color(146, 208, 80));
     $("#caminho").html("Saindo de " + melhorCaminho[melhorCaminho.length - 1].local + " até " + melhorCaminho[0].local);
-    var intervalo = setInterval(function(){
+    let intervalo = setInterval(function(){
         image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
         if(melhorCaminho[cont - 1]){
             $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
