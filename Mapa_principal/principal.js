@@ -189,9 +189,10 @@ function removeBloco(arr, bloco){
 
 function busca(blocosA, blocosNaoA, inicio, meta){
     setup();
+    dataInicial = new Date();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
-    
+
     while(atual != meta){
         var menorF = 0; //O bloco que será avaliado é o com menor valor f(n)
         for(let i = 0; i < blocosNaoA.length; i++){
@@ -200,6 +201,9 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
+            dataFinal = new Date();
+            dif = Math.abs((dataInicial.getTime() - dataFinal.getTime()) / 1000);
+            $("#tempoExecucao").html(dif + 's');
             desenharCaminho(atual);
             personagem = mapa[atual.i][atual.j];
         }else{
