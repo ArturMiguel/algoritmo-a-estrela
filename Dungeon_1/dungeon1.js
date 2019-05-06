@@ -29,6 +29,7 @@ tam = 28;
 mapa = new Array(tam);
 blocosAvaliados = []; //Conjunto de nós avaliados
 blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
+taDesenhando = 0;
 
 function preload(){
     imgLink = loadImage("personagem.gif");
@@ -102,6 +103,7 @@ function desenharCaminho(atual){
     let contPassos = 0;
     personagem.show(color(255, 255, 255));
     let intervalo = setInterval(function(){
+        taDesenhando = 1;
         image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800) / tam, 28, 28);
         if(melhorCaminho[cont - 1]){
             $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
@@ -110,6 +112,7 @@ function desenharCaminho(atual){
             melhorCaminho[cont + 1].show(color(255, 255, 0));
         }
         if(cont == 0){
+            taDesenhando = 0;
             clearInterval(intervalo);
         }else{
             cont = cont - 1;
@@ -120,6 +123,7 @@ function desenharCaminho(atual){
 
 function busca(blocosA, blocosNaoA, inicio, meta){
     setup();
+    dataInicial = new Date();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
     while(atual != meta){ //O bloco que será avaliado é o com menor valor f(n)
@@ -130,6 +134,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
+            dataFinal = new Date();
             if(meta.local == "Pingente"){
                 $("#irPingente").hide();
                 $("#irEntrada").show();
@@ -137,6 +142,8 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                 $("#irEntrada").hide();
                 $("#irMapa").show();
             }
+            dif = Math.abs((dataInicial.getTime() - dataFinal.getTime()) / 1000);
+            $("#tempoExecucao").html(dif + 's');
             desenharCaminho(atual);
         }else{
             removeBloco(blocosNaoA, atual);
@@ -167,3 +174,15 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
     }
 }
+
+setInterval(function(){
+    if(taDesenhando == 0) {
+        $("button").each(function() {
+            $(this).removeAttr('disabled');
+        });
+    }else{
+        $("button").each(function() {
+            $(this).attr('disabled', 'true');
+        });
+    }
+}, 0)

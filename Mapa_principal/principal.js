@@ -44,6 +44,7 @@ mapa = new Array(tam);
 blocosAvaliados = []; //Conjunto de nós avaliados
 blocosNaoAvaliados = []; //Conjuntos de nós expandidos mas que não foram avaliados
 qtdPingentes = 0;
+taDesenhando = 0;
 
 function preload(){
     imgLink = loadImage("personagem.gif");
@@ -162,6 +163,7 @@ function desenharCaminho(atual){
     personagem.show(color(146, 208, 80));
     $("#caminho").html("Saindo de " + melhorCaminho[melhorCaminho.length - 1].local + " até " + melhorCaminho[0].local);
     let intervalo = setInterval(function(){
+        taDesenhando = 1;
         image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
         if(melhorCaminho[cont - 1]){
             $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
@@ -170,6 +172,7 @@ function desenharCaminho(atual){
             melhorCaminho[cont + 1].show(color(255, 255,  0));
         }
         if(cont == 0){
+            taDesenhando = 0;
             clearInterval(intervalo);
             tipoDestino(atual);
         }else{
@@ -244,3 +247,16 @@ function verificarPingentes(){
         alert("Colete todos os pingentes primeiramente para prosseguir até Lost Woods!\nQuantidade coletada até agora: " + qtdPingentes);
     }
 }
+
+//Maior gambiarra para desabilitar os button
+setInterval(function(){
+    if(taDesenhando == 0) {
+        $("button").each(function() {
+            $(this).removeAttr('disabled');
+        });
+    }else{
+        $("button").each(function() {
+            $(this).attr('disabled', 'true');
+        });
+    }
+}, 0)
