@@ -158,6 +158,7 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
+    console.log(melhorCaminho);
     let cont = melhorCaminho.length - 1;
     let contPassos = 0;
     personagem.show(color(146, 208, 80));
