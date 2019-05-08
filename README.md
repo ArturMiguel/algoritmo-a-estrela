@@ -6,15 +6,13 @@ Trabalho desenvolvimento para disciplina de Inteligência Artificial com objeto 
 A implementação desde trabalho baseia-se na heurística de *Manhattan distance* para encontrar o menor caminho entre dois pontos, além disso cada passo possui um custo relacionado ao terreno que o personagem caminha, ou seja, o algoritmo deve ser capaz de identificar a menor distância com o menor custo e propositalmente o personagem é limitado a andar/avaliar os blocos que estão a sua frente, direita, esquerda ou atrás.
 
 ### Tabela de custos
-> Grama     -> custo +10
-
-> Areia     -> custo +20
-
-> Floresta  -> custo +100
-
-> Montanha  -> custo +150
-
-> Água      -> custo +180
+| Terreno | Custo |
+| --- | --- |
+| Grama | +10|
+| Areia | +20|
+| Floresta | +100|
+| Montanha | +150|
+| Água | +180|
 
 ### Linguagens 
 > HTML 5
