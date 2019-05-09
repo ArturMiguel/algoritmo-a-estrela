@@ -1,10 +1,7 @@
 Execução do algoritmo: https://arturmiguel.github.io/algoritmoaestrela/index.html
 
-### Descrição
-O trabalho consiste em fazer com que o agente (Link) seja capaz de locomover-se autonomamente pelo reino de Hyrule, explorar as perigosas dungeons e reunir os três Pingentes da Virtude (coragem, poder e sabedoria).<br>
-Para isso é implementado o algoritmo A* baseando-se na heurística de *Manhatan distance* para encontrar a melhor rota considerando a distância entre estado atual e meta e o custo de cada terreno.
-
-### Algoritmo A*
+# Algoritmo A*
+A implementação desde trabalho baseia-se na heurística de *Manhattan distance* para encontrar o menor caminho entre dois pontos, além disso cada passo possui um custo relacionado ao terreno que o personagem caminha, ou seja, o algoritmo deve ser capaz de identificar a menor distância com o menor custo e propositalmente o personagem é limitado a andar/avaliar os blocos que estão a sua frente, direita, esquerda ou atrás.
 
 ### Tabela de custos
 | Terreno | Custo |
@@ -28,3 +25,6 @@ Para isso é implementado o algoritmo A* baseando-se na heurística de *Manhatan
 > [p5.js](https://p5js.org/)
 
 > [imageio](https://imageio.github.io/)
+
+### Referências
+> [A* search algorithm - Wikipedia](https://en.wikipedia.org/wiki/A*_search_algorithm)

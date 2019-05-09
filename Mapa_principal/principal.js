@@ -86,7 +86,7 @@ function setup(){
     mapaZelda = createCanvas(800, 800);
     h = height / tam;
     w = width / tam;
-    for(let i = 0; i < tam; i++){ //Criação do Array 2d
+    for(let i = 0; i < tam; i++){
         mapa[i] = new Array(tam);
     }
     for(let i = 0; i < tam; i++){
