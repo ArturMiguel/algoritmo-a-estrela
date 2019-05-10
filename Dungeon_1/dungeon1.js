@@ -106,7 +106,7 @@ function desenharCaminho(atual){
         taDesenhando = 1;
         image(imgLink, (melhorCaminho[cont].i * 800) / tam, (melhorCaminho[cont].j * 800) / tam, 28, 28);
         if(melhorCaminho[cont - 1]){
-            $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
+            $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + (melhorCaminho[cont - 1].h).toFixed(0) + "</th><th>" + (melhorCaminho[cont - 1].f).toFixed(0) + "</th></tr>");
         }
         if(melhorCaminho[cont + 1]){
             melhorCaminho[cont + 1].show(color(255, 255, 0));
@@ -119,6 +119,18 @@ function desenharCaminho(atual){
             contPassos = contPassos + 1;
         }
     }, 200);
+}
+
+function heuristica(x1, y1, x2, y2){
+    if($("#heuristica").val() == "manhatan"){
+        return abs(x1 - x2) + abs(y1 - y2);
+    }else if($("#heuristica").val() == "euclidiana"){
+        return sqrt(Math.pow(abs(x1 - x2), 2) + Math.pow(abs(y1 - y2), 2));
+    }else if($("#heuristica").val() == "chebyshev"){
+        return max(abs(x1 - x2), abs(y1 - y2));
+    }else if($("#heuristica").val() == "octile"){
+        return 1 * max(abs(x1 - x2)) + (sqrt(2) - 1) * min(abs(x1 - x2), abs(y1 - y2));
+    }
 }
 
 function busca(blocosA, blocosNaoA, inicio, meta){
@@ -164,7 +176,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                     if(novoCaminho){ //Salva o melhor caminho até o momento
                         if(atual != inicio){ //Ignora os custos do bloco inicial
                             vizinhos[i].g = atualG;
-                            vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
+                            vizinhos[i].h = heuristica(vizinhos[i].i, vizinhos[i].j, meta.i, meta.j);
                             vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
                         }
                         vizinhos[i].anterior = atual;

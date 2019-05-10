@@ -19,16 +19,6 @@
                 <button id="irMapa" style="display: none" class="btn btn-success" onclick="window.history.back()">Sair da dungeon</button>
             </div>
             <div class="form-group">
-                <table class="table table-striped table-bordered">
-                    <tbody>
-                        <tr>
-                            <td>Tempo de Execução</td>
-                            <td id="tempoExecucao"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="form-group">
                 <table class='table table-striped'>
                     <thread>
                         <tr>
@@ -43,6 +33,18 @@
                     </tbody>
                 </table>
             </div>
+            <div class="form-group">
+                <label for="heuristica"><b>Definir heurística:</b></label>
+                <select class="form-control" id="heuristica">
+                    <option value="manhatan">Manhatan</option>
+                    <option value="euclidiana">Euclidiana</option>
+                    <option value="chebyshev">Chebyshev</option>
+                    <option value="octile">Octile</option>
+                </select>
+            </div>
         </fieldset>
     </body>
+    <div id="footer">
+        <a href="https://github.com/ArturMiguel/algoritmoaestrela">Repositório GitHub</a>
+    </div>
 </html>

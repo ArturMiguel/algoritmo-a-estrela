@@ -158,7 +158,6 @@ function desenharCaminho(atual){
         melhorCaminho.push(aux.anterior);
         aux = aux.anterior;
     }
-    console.log(melhorCaminho);
     let cont = melhorCaminho.length - 1;
     let contPassos = 0;
     personagem.show(color(146, 208, 80));
@@ -167,7 +166,7 @@ function desenharCaminho(atual){
         taDesenhando = 1;
         image(imgLink, (melhorCaminho[cont].i * 800) / (42), (melhorCaminho[cont].j * 800) / (42), 20, 20);
         if(melhorCaminho[cont - 1]){
-            $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + melhorCaminho[cont - 1].h + "</th><th>" + melhorCaminho[cont - 1].f + "</th></tr>");
+            $("#listagem").html("<tr><th>" + contPassos + "</th><th>" + melhorCaminho[cont - 1].g + "</th><th>" + (melhorCaminho[cont - 1].h).toFixed(0) + "</th><th>" + (melhorCaminho[cont - 1].f).toFixed(0) + "</th></tr>");
         }
         if(melhorCaminho[cont + 1]){
             melhorCaminho[cont + 1].show(color(255, 255,  0));
@@ -191,12 +190,22 @@ function removeBloco(arr, bloco){
     }
 }
 
+function heuristica(x1, y1, x2, y2){
+    if($("#heuristica").val() == "manhatan"){
+        return abs(x1 - x2) + abs(y1 - y2);
+    }else if($("#heuristica").val() == "euclidiana"){
+        return sqrt(Math.pow(abs(x1 - x2), 2) + Math.pow(abs(y1 - y2), 2));
+    }else if($("#heuristica").val() == "chebyshev"){
+        return max(abs(x1 - x2), abs(y1 - y2));
+    }else if($("#heuristica").val() == "octile"){
+        return max(abs(x1 - x2)) + (sqrt(2) - 1) * min(abs(x1 - x2), abs(y1 - y2));
+    }
+}
+
 function busca(blocosA, blocosNaoA, inicio, meta){
     setup();
-    dataInicial = new Date();
     blocosA = []; blocosNaoA = []; //Blocos avaliados e blocos não avaliados
     blocosNaoA.push(inicio);
-
     while(atual != meta){
         var menorF = 0; //O bloco que será avaliado é o com menor valor f(n)
         for(let i = 0; i < blocosNaoA.length; i++){
@@ -205,9 +214,6 @@ function busca(blocosA, blocosNaoA, inicio, meta){
         }
         var atual = blocosNaoA[menorF];
         if(atual === meta){ //Se o bloco atual for o objetivo (meta) encerra a execução
-            dataFinal = new Date();
-            dif = Math.abs((dataInicial.getTime() - dataFinal.getTime()) / 1000);
-            $("#tempoExecucao").html(dif + 's');
             desenharCaminho(atual);
             personagem = mapa[atual.i][atual.j];
         }else{
@@ -229,7 +235,7 @@ function busca(blocosA, blocosNaoA, inicio, meta){
                     if(novoCaminho){ //Salva o melhor caminho até o momento
                         if(atual != inicio){ //Ignora os custos do bloco inicial
                             vizinhos[i].g = atualG;
-                            vizinhos[i].h = abs(meta.i - vizinhos[i].i) + abs(meta.j - vizinhos[i].j); //Manhattan distance
+                            vizinhos[i].h = heuristica(vizinhos[i].i, vizinhos[i].j, meta.i, meta.j);
                             vizinhos[i].f = vizinhos[i].g + vizinhos[i].h;
                         }
                         vizinhos[i].anterior = atual;

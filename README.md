@@ -1,7 +1,9 @@
+# Algoritmo A* (A estrela)
+
 Execução do algoritmo: https://arturmiguel.github.io/algoritmoaestrela/index.html
 
-# Algoritmo A*
-A implementação desde trabalho baseia-se na heurística de *Manhattan distance* para encontrar o menor caminho entre dois pontos, além disso cada passo possui um custo relacionado ao terreno que o personagem caminha, ou seja, o algoritmo deve ser capaz de identificar a menor distância com o menor custo e propositalmente o personagem é limitado a andar/avaliar os blocos que estão a sua frente, direita, esquerda ou atrás.
+### Descrição
+O trabalho consiste em implementar um agente (Link) capaz de locomover-se autonomamente pelo reino de Hyrule, explorar as perigosas dungeons e reunir os três Pingentes da Virtude (coragem, poder e sabedoria). Para isso, foi utilizado o algoritmo de busca A*. O agente deve ser capaz de calcular automaticamente a melhor rota para reunir os três pingentes da virtude e ir para Lost Woods, onde está localizada a Master Sword.
 
 ### Tabela de custos
 | Terreno | Custo |
@@ -11,6 +13,15 @@ A implementação desde trabalho baseia-se na heurística de *Manhattan distance
 | Floresta | +100|
 | Montanha | +150|
 | Água | +180|
+
+### Heuristícas
+> Manhatan
+
+> Euclidiana
+
+> Chebyshev
+
+> Octile
 
 ### Linguagens 
 > HTML 5 e CSS 3
@@ -28,3 +39,9 @@ A implementação desde trabalho baseia-se na heurística de *Manhattan distance
 
 ### Referências
 > [A* search algorithm - Wikipedia](https://en.wikipedia.org/wiki/A*_search_algorithm)
+
+> [Coding Train](https://thecodingtrain.com/)
+
+> [Euclidean vs Chebyshev vs Manhattan Distance](https://lyfat.wordpress.com/2012/05/22/euclidean-vs-chebyshev-vs-manhattan-distance/)
+
+> [Heuristics](http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html)
