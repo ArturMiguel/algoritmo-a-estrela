@@ -14,15 +14,6 @@ O trabalho consiste em implementar um agente (Link) capaz de locomover-se autono
 | Montanha | +150|
 | Água | +180|
 
-### Heuristícas
-> Manhatan
-
-> Euclidiana
-
-> Chebyshev
-
-> Octile
-
 ### Linguagens 
 > HTML 5 e CSS 3
 
